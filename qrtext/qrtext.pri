@@ -112,6 +112,7 @@ HEADERS += \
 	$$PWD/src/lua/luaPrecedenceTable.h \
 	$$PWD/src/lua/luaSemanticAnalyzer.h \
 	$$PWD/src/lua/luaTokenTypes.h \
+    $$PWD/src/hm/HMSemanticAnalyzer.h
 
 SOURCES += \
 	$$PWD/src/core/connection.cpp \
@@ -127,3 +128,4 @@ SOURCES += \
 	$$PWD/src/lua/luaPrecedenceTable.cpp \
 	$$PWD/src/lua/luaSemanticAnalyzer.cpp \
 	$$PWD/src/lua/luaToolbox.cpp \
+    $$PWD/src/hm/HMSemanticAnalyzer.cpp
