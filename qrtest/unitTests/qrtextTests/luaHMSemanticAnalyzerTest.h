@@ -13,14 +13,14 @@ namespace qrTest {
 class LuaHMSemanticAnalyzerTest : public testing::Test
 {
 protected:
-    void SetUp() override;
+	void SetUp() override;
 
-    QSharedPointer<qrtext::core::ast::Node> parse(QString const &code);
+	QSharedPointer<qrtext::core::ast::Node> parse(QString const &code);
 
-    QScopedPointer<qrtext::HMSemanticAnalyzer> mAnalyzer;
-    QScopedPointer<qrtext::lua::details::LuaParser> mParser;
-    QScopedPointer<qrtext::lua::details::LuaLexer> mLexer;
-    QList<qrtext::core::Error> mErrors;
+	QScopedPointer<qrtext::HMSemanticAnalyzer> mAnalyzer;
+	QScopedPointer<qrtext::lua::details::LuaParser> mParser;
+	QScopedPointer<qrtext::lua::details::LuaLexer> mLexer;
+	QList<qrtext::core::Error> mErrors;
 };
 
 }
