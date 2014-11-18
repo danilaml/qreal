@@ -23,9 +23,9 @@ using namespace qrtext::lua::types;
 
 void LuaHMSemanticAnalyzerTest::SetUp()
 {
-    //mAnalyzer.reset(new HMSemanticAnalyzer(mErrors));
-    mParser.reset(new LuaParser(mErrors));
-    mLexer.reset(new LuaLexer(mErrors));
+	//mAnalyzer.reset(new HMSemanticAnalyzer(mErrors));
+	mParser.reset(new LuaParser(mErrors));
+	mLexer.reset(new LuaLexer(mErrors));
 }
 
 //QSharedPointer<qrtext::core::ast::Node> LuaHMSemanticAnalyzerTest::parse(QString const &code)
