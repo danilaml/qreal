@@ -16,6 +16,7 @@ HEADERS += \
 	luaParserTest.h \
 	luaSemanticAnalyzerTest.h \
 	luaToolboxTest.h \
+    luaHMSemanticAnalyzerTest.h
 
 SOURCES += \
 	luaInterpreterIncorrectInputTest.cpp \
@@ -25,3 +26,4 @@ SOURCES += \
 	luaSemanticAnalyzerTest.cpp \
 	luaToolboxTest.cpp \
 	luaLexerTest.cpp \
+    luaHMSemanticAnalyzerTest.cpp
