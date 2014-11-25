@@ -23,10 +23,10 @@ public:
 
 private:
 	void solveConstraints();
-	QSharedPointer<core::types::TypeExpression> solveConstraints(QSharedPointer<HMTypeVariable> &type
+	QSharedPointer<types::TypeExpression> solveConstraints(QSharedPointer<HMTypeVariable> &type
 	                                                       );
 	bool isOfBaseType(QSharedPointer<core::types::TypeExpression> &expr) const;
-	QSharedPointer<core::types::TypeExpression> unify(QSharedPointer<types::TypeExpression> &tvar, QSharedPointer<core::types::TypeExpression> &texp);
+	QSharedPointer<types::TypeExpression> unify(QSharedPointer<types::TypeExpression> &tvar, QSharedPointer<core::types::TypeExpression> &texp);
 	void substitute(QSharedPointer<HMTypeVariable> &type, QSharedPointer<HMTypeVariable> &with);
 
 	HMLuaVisitor mVisitor;

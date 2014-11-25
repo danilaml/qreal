@@ -136,6 +136,8 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointe
 		auto tvarleft = as<HMTypeVariable>(tvar);
 		substitute(rightvar, tvarleft);
 		return solveConstraints(rightvar);
+	} else {
+		return texp; // rewrite this.
 	}
 }
 

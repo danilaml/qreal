@@ -59,6 +59,9 @@ public:
 //	virtual void visit(ast::IndexingExpression const &node)  { Q_UNUSED(node); }
 
 private:
+	int getNewId();
+
+	int i;
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> mTypeVars;
 	QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression>>> mTypeConstraints;
 

@@ -3,7 +3,7 @@
 using namespace qrtext;
 using namespace lua;
 
-HMLuaVisitor::HMLuaVisitor()
+HMLuaVisitor::HMLuaVisitor() : i(0)
 {
 }
 
@@ -15,4 +15,9 @@ QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> HML
 QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression> > > HMLuaVisitor::getTypeConstraints() const
 {
 	return mTypeConstraints;
+}
+
+int HMLuaVisitor::getNewId()
+{
+	return i++;
 }
