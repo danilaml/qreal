@@ -115,7 +115,8 @@ HEADERS += \
     $$PWD/src/hm/HMSemanticAnalyzer.h \
     $$PWD/src/hm/HMTypeVariable.h \
     $$PWD/src/lua/HMLuaSemanticAnalyzer.h \
-    $$PWD/src/lua/HMLuaVisitor.h
+    $$PWD/src/lua/HMLuaVisitor.h \
+    $$PWD/src/hm/HMFunctionType.h
 
 SOURCES += \
 	$$PWD/src/core/connection.cpp \
@@ -134,4 +135,5 @@ SOURCES += \
     $$PWD/src/hm/HMSemanticAnalyzer.cpp \
     $$PWD/src/hm/HMTypeVariable.cpp \
     $$PWD/src/lua/HMLuaSemanticAnalyzer.cpp \
-    $$PWD/src/lua/HMLuaVisitor.cpp
+    $$PWD/src/lua/HMLuaVisitor.cpp \
+    $$PWD/src/hm/HMFunctionType.cpp
