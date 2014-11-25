@@ -1,8 +1,9 @@
-#include "qrtext/src/lua/HMLuaSemanticAnalyzer.h"
+﻿#include "qrtext/src/lua/HMLuaSemanticAnalyzer.h"
 
 #include "qrtext/src/lua/luaGeneralizationsTable.h"
 
 #include "qrtext/src/hm/HMTypeVariable.h"
+#include "qrtext/core/types/any.h"
 
 #include "qrtext/lua/types/boolean.h"
 #include "qrtext/lua/types/float.h"
@@ -114,7 +115,7 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::solveConstraints(QS
 	if (constraints.isEmpty()) {
 //		reportError(operation, QObject::tr("Type mismatch."));
 	}
-	QSharedPointer<core::types::TypeExpression> unifiedType = type;
+	QSharedPointer<core::types::TypeExpression> unifiedType = constraints.at(0);
 	for (auto c : constraints) {
 		unifiedType = unify(unifiedType, c);
 	}
@@ -123,18 +124,17 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::solveConstraints(QS
 
 bool HMLuaSemanticAnalyzer::isOfBaseType(QSharedPointer<core::types::TypeExpression> &expr) const
 {
-	return !expr->is<HMTypeVariable>();
+	return !(expr->is<HMTypeVariable>() || expr->is<core::types::Any>());
 }
 
-QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointer<core::types::TypeExpression> &tvar
-                                                                         , QSharedPointer<core::types::TypeExpression> &texp)
+QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointer<core::types::TypeExpression> &leftexpr
+                                                                   , QSharedPointer<core::types::TypeExpression> &rightexpr)
 {
-	if (isOfBaseType(texp)) {
-		return texp;
-	} else if (!isOfBaseType(tvar)) {
-		auto rightvar = as<HMTypeVariable>(texp);
-		auto tvarleft = as<HMTypeVariable>(tvar);
-		substitute(rightvar, tvarleft);
+	if (isOfBaseType(leftexpr)) {
+		return leftexpr;
+	} else if (!isOfBaseType(rightexpr)) {
+		auto rightvar = as<HMTypeVariable>(leftexpr);
+		substitute(rightvar, leftvar);
 		return solveConstraints(rightvar);
 	} else {
 		return texp; // rewrite this.
