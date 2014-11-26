@@ -112,7 +112,10 @@ HEADERS += \
 	$$PWD/src/lua/luaPrecedenceTable.h \
 	$$PWD/src/lua/luaSemanticAnalyzer.h \
 	$$PWD/src/lua/luaTokenTypes.h \
-    $$PWD/src/hm/HMSemanticAnalyzer.h
+	$$PWD/src/hm/HMSemanticAnalyzer.h \
+	$$PWD/src/hm/HMTypeVariable.h \
+	$$PWD/src/lua/HMLuaSemanticAnalyzer.h \
+	$$PWD/src/lua/HMLuaVisitor.h
 
 SOURCES += \
 	$$PWD/src/core/connection.cpp \
@@ -128,4 +131,7 @@ SOURCES += \
 	$$PWD/src/lua/luaPrecedenceTable.cpp \
 	$$PWD/src/lua/luaSemanticAnalyzer.cpp \
 	$$PWD/src/lua/luaToolbox.cpp \
-    $$PWD/src/hm/HMSemanticAnalyzer.cpp
+	$$PWD/src/hm/HMSemanticAnalyzer.cpp \
+	$$PWD/src/hm/HMTypeVariable.cpp \
+	$$PWD/src/lua/HMLuaSemanticAnalyzer.cpp \
+	$$PWD/src/lua/HMLuaVisitor.cpp
