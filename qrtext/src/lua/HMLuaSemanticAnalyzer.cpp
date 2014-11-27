@@ -75,13 +75,14 @@ QSharedPointer<ast::Node> HMLuaSemanticAnalyzer::analyze(const QSharedPointer<as
 		return root;
 	}
 
-//	for (auto child : node->children()) {
-//		if (!child.isNull()) {
-//			analyze(child);
-//		}
-//	}
+	for (auto child : root->children()) {
+		if (!child.isNull()) {
+			analyze(child);
+		}
+	}
 
-	root->acceptRecursively(mVisitor);
+	mVisitor.setCurrentNode(root);
+	root->accept(mVisitor);
 
 	mVarTypes = mVisitor.getTypeVars();
 	mTypeConstraints = mVisitor.getTypeConstraints();
