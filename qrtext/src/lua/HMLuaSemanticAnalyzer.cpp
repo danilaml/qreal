@@ -111,7 +111,7 @@ void HMLuaSemanticAnalyzer::solveConstraints()
 
 QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::solveConstraints(QSharedPointer<HMTypeVariable> &type)
 {
-	auto constraints = mTypeConstraints.value(type);
+	auto constraints = mTypeConstraints.value(type)->values();
 	if (constraints.isEmpty()) {
 //		reportError(operation, QObject::tr("Type mismatch."));
 	}
@@ -133,11 +133,12 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointe
 	if (isOfBaseType(leftexpr)) {
 		return leftexpr;
 	} else if (!isOfBaseType(rightexpr)) {
-		auto rightvar = as<HMTypeVariable>(leftexpr);
-		substitute(rightvar, leftvar);
-		return solveConstraints(rightvar);
+//		auto rightvar = as<HMTypeVariable>(leftexpr);
+//		substitute(leftexpr, rightvar);
+//		return solveConstraints(rightvar);
+		return leftexpr;
 	} else {
-		return texp; // rewrite this.
+		return rightexpr; // rewrite this.
 	}
 }
 

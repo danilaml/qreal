@@ -23,15 +23,14 @@ public:
 
 private:
 	void solveConstraints();
-	QSharedPointer<types::TypeExpression> solveConstraints(QSharedPointer<HMTypeVariable> &type
-	                                                       );
+	QSharedPointer<types::TypeExpression> solveConstraints(QSharedPointer<HMTypeVariable> &type);
 	bool isOfBaseType(QSharedPointer<core::types::TypeExpression> &expr) const;
 	QSharedPointer<types::TypeExpression> unify(QSharedPointer<types::TypeExpression> &tvar, QSharedPointer<core::types::TypeExpression> &texp);
 	void substitute(QSharedPointer<HMTypeVariable> &type, QSharedPointer<HMTypeVariable> &with);
 
 	HMLuaVisitor mVisitor;
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> mVarTypes;
-	QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression>>> mTypeConstraints;
+	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<HMLuaVisitor::ConstrainSet>> mTypeConstraints;
 
 
 };

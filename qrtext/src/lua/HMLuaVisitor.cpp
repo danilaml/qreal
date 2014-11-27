@@ -12,7 +12,7 @@ QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> HML
 	return mTypeVars;
 }
 
-QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression> > > HMLuaVisitor::getTypeConstraints() const
+QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<HMLuaVisitor::ConstrainSet> > HMLuaVisitor::getTypeConstraints() const
 {
 	return mTypeConstraints;
 }
@@ -20,4 +20,12 @@ QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpre
 int HMLuaVisitor::getNewId()
 {
 	return i++;
+}
+
+void HMLuaVisitor::addConstraint(QSharedPointer<HMTypeVariable> &to, QSharedPointer<core::types::TypeExpression> &constraint)
+{
+	if (!mTypeConstraints.contains(to)) {
+		mTypeConstraints.insert(to, QSharedPointer<ConstrainSet>(new ConstrainSet()));
+	}
+	mTypeConstraints.value(to)->insert(constraint);
 }

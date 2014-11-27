@@ -12,10 +12,11 @@ namespace lua {
 class HMLuaVisitor : public LuaAstVisitorInterface
 {
 public:
+	typedef QSet<QSharedPointer<core::types::TypeExpression>> ConstrainSet;
 	HMLuaVisitor();
 
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> getTypeVars() const;
-	QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression>>> getTypeConstraints() const;
+	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<ConstrainSet>> getTypeConstraints() const;
 
 //	virtual void visit(ast::Number const &node)              { Q_UNUSED(node); }
 //	virtual void visit(ast::UnaryMinus const &node)          { Q_UNUSED(node); }
@@ -60,10 +61,11 @@ public:
 
 private:
 	int getNewId();
+	void addConstraint(QSharedPointer<HMTypeVariable> &to, QSharedPointer<core::types::TypeExpression> &constraint);
 
 	int i;
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> mTypeVars;
-	QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression>>> mTypeConstraints;
+	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<ConstrainSet>> mTypeConstraints;
 
 };
 
