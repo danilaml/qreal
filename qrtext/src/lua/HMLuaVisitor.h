@@ -17,7 +17,7 @@ public:
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> getTypeVars() const;
 	QHash<QSharedPointer<HMTypeVariable>, QSet<QSharedPointer<core::types::TypeExpression>>> getTypeConstraints() const;
 
-//	virtual void visit(ast::Number const &node)              { Q_UNUSED(node); }
+	virtual void visit(ast::Number const &node)              { Q_UNUSED(node); }
 //	virtual void visit(ast::UnaryMinus const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::Not const &node)                 { Q_UNUSED(node); }
 //	virtual void visit(ast::BitwiseNegation const &node)     { Q_UNUSED(node); }
@@ -43,11 +43,11 @@ public:
 //	virtual void visit(ast::Inequality const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::GreaterThan const &node)         { Q_UNUSED(node); }
 //	virtual void visit(ast::GreaterOrEqual const &node)      { Q_UNUSED(node); }
-//	virtual void visit(ast::IntegerNumber const &node)       { Q_UNUSED(node); }
-//	virtual void visit(ast::FloatNumber const &node)         { Q_UNUSED(node); }
+	virtual void visit(ast::IntegerNumber const &node)       { Q_UNUSED(node); }
+	virtual void visit(ast::FloatNumber const &node)         { Q_UNUSED(node); }
 //	virtual void visit(ast::FieldInitialization const &node) { Q_UNUSED(node); }
 //	virtual void visit(ast::TableConstructor const &node)    { Q_UNUSED(node); }
-//	virtual void visit(ast::String const &node)              { Q_UNUSED(node); }
+	virtual void visit(ast::String const &node)              { Q_UNUSED(node); }
 //	virtual void visit(ast::True const &node)                { Q_UNUSED(node); }
 //	virtual void visit(ast::False const &node)               { Q_UNUSED(node); }
 //	virtual void visit(ast::Nil const &node)                 { Q_UNUSED(node); }
