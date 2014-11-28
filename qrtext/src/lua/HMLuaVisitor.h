@@ -15,6 +15,7 @@ public:
 	typedef QSet<QSharedPointer<core::types::TypeExpression>> ConstrainSet;
 	HMLuaVisitor();
 
+	void setCurrentNode(const QSharedPointer<core::ast::Node> &node);
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> getTypeVars() const;
 	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<ConstrainSet>> getTypeConstraints() const;
 
@@ -45,7 +46,7 @@ public:
 //	virtual void visit(ast::GreaterThan const &node)         { Q_UNUSED(node); }
 //	virtual void visit(ast::GreaterOrEqual const &node)      { Q_UNUSED(node); }
 //	virtual void visit(ast::IntegerNumber const &node)       { Q_UNUSED(node); }
-//	virtual void visit(ast::FloatNumber const &node)         { Q_UNUSED(node); }
+	virtual void visit(ast::FloatNumber const &node);
 //	virtual void visit(ast::FieldInitialization const &node) { Q_UNUSED(node); }
 //	virtual void visit(ast::TableConstructor const &node)    { Q_UNUSED(node); }
 //	virtual void visit(ast::String const &node)              { Q_UNUSED(node); }
@@ -64,8 +65,15 @@ private:
 	void addConstraint(QSharedPointer<HMTypeVariable> &to, QSharedPointer<core::types::TypeExpression> &constraint);
 
 	int i;
+	QSharedPointer<core::ast::Node> mNode; //current node
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> mTypeVars;
 	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<ConstrainSet>> mTypeConstraints;
+
+	QSharedPointer<core::types::TypeExpression> mBoolean;
+	QSharedPointer<core::types::TypeExpression> mFloat;
+	QSharedPointer<core::types::TypeExpression> mInteger;
+	QSharedPointer<core::types::TypeExpression> mNil;
+	QSharedPointer<core::types::TypeExpression> mString;
 
 };
 
