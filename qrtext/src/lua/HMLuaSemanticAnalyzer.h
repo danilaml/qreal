@@ -14,7 +14,7 @@ class QRTEXT_EXPORT HMLuaSemanticAnalyzer : public HMSemanticAnalyzer
 public:
 //	HMLuaSemanticAnalyzer(QSharedPointer<GeneralizationsTableInterface> const &generalizationsTable
 //	                   , QList<Error> &errors);
-	HMLuaSemanticAnalyzer(QList<Error> &errors);
+	explicit HMLuaSemanticAnalyzer(QList<Error> &errors);
 
 	QSharedPointer<core::ast::Node> analyze(QSharedPointer<core::ast::Node> const &root);
 
