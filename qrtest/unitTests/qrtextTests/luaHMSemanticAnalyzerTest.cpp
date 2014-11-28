@@ -23,7 +23,7 @@ using namespace qrtext::lua::types;
 
 void LuaHMSemanticAnalyzerTest::SetUp()
 {
-	//mAnalyzer.reset(new HMSemanticAnalyzer(mErrors));
+	//mAnalyzer.reset(new HMLuaSemanticAnalyzer(mErrors));
 	mParser.reset(new LuaParser(mErrors));
 	mLexer.reset(new LuaLexer(mErrors));
 }

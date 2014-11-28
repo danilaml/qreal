@@ -45,7 +45,7 @@ public:
 //	virtual void visit(ast::Inequality const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::GreaterThan const &node)         { Q_UNUSED(node); }
 //	virtual void visit(ast::GreaterOrEqual const &node)      { Q_UNUSED(node); }
-//	virtual void visit(ast::IntegerNumber const &node)       { Q_UNUSED(node); }
+	virtual void visit(ast::IntegerNumber const &node);
 	virtual void visit(ast::FloatNumber const &node);
 //	virtual void visit(ast::FieldInitialization const &node) { Q_UNUSED(node); }
 //	virtual void visit(ast::TableConstructor const &node)    { Q_UNUSED(node); }

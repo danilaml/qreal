@@ -39,11 +39,20 @@ QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<HMLuaVisitor::ConstrainSet>
 	return mTypeConstraints;
 }
 
+void HMLuaVisitor::visit(const ast::IntegerNumber &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	addConstraint(hm, mInteger);
+	Q_UNUSED(node);
+}
+
 void HMLuaVisitor::visit(const ast::FloatNumber &node)
 {
 	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
 	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
 	addConstraint(hm, mFloat);
+	Q_UNUSED(node);
 }
 
 int HMLuaVisitor::getNewId()

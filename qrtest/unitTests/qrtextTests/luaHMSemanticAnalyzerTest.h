@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-#include "qrtext/src/hm/HMSemanticAnalyzer.h"
+#include "qrtext/src/lua/HMLuaSemanticAnalyzer.h"
 #include "qrtext/src/lua/luaParser.h"
 #include "qrtext/src/lua/luaLexer.h"
 
@@ -17,7 +17,7 @@ protected:
 
 	QSharedPointer<qrtext::core::ast::Node> parse(QString const &code);
 
-	QScopedPointer<qrtext::HMSemanticAnalyzer> mAnalyzer;
+	QScopedPointer<qrtext::lua::details::HMLuaSemanticAnalyzer> mAnalyzer;
 	QScopedPointer<qrtext::lua::details::LuaParser> mParser;
 	QScopedPointer<qrtext::lua::details::LuaLexer> mLexer;
 	QList<qrtext::core::Error> mErrors;
