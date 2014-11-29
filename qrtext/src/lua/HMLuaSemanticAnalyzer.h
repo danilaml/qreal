@@ -22,6 +22,7 @@ public:
 
 
 private:
+	void analyzeNode(QSharedPointer<core::ast::Node> const &node) override;
 	void solveConstraints();
 	QSharedPointer<types::TypeExpression> solveConstraints(QSharedPointer<HMTypeVariable> &type);
 	bool isOfBaseType(QSharedPointer<core::types::TypeExpression> &expr) const;
