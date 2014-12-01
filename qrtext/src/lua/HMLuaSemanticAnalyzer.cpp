@@ -86,15 +86,15 @@ QSharedPointer<ast::Node> HMLuaSemanticAnalyzer::analyze(const QSharedPointer<as
 }
 
 
-//QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::type(const QSharedPointer<ast::Node> &expression) const
-//{
-//	auto castedExpression = as<ast::Expression>(expression);
-//	if (mTypes.contains(castedExpression)) {
-//		return mTypes.value(castedExpression)->finalType();
-//	} else {
-//		return mAny;
-//	}
-//}
+QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::type(const QSharedPointer<ast::Node> &expression) const
+{
+	auto castedExpression = as<ast::Expression>(expression);
+	if (mVarTypes.contains(castedExpression)) {
+		return mTypeConstraints.value(mVarTypes.value(castedExpression))->values().at(0); // for now
+	} else {
+		return core::wrap(new core::types::Any());
+	}
+}
 
 void HMLuaSemanticAnalyzer::solveConstraints()
 {
