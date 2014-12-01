@@ -49,10 +49,10 @@ public:
 	virtual void visit(ast::FloatNumber const &node);
 //	virtual void visit(ast::FieldInitialization const &node) { Q_UNUSED(node); }
 //	virtual void visit(ast::TableConstructor const &node)    { Q_UNUSED(node); }
-//	virtual void visit(ast::String const &node)              { Q_UNUSED(node); }
-//	virtual void visit(ast::True const &node)                { Q_UNUSED(node); }
-//	virtual void visit(ast::False const &node)               { Q_UNUSED(node); }
-//	virtual void visit(ast::Nil const &node)                 { Q_UNUSED(node); }
+	virtual void visit(ast::String const &node);
+	virtual void visit(ast::True const &node);
+	virtual void visit(ast::False const &node);
+	virtual void visit(ast::Nil const &node);
 //	virtual void visit(ast::Identifier const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::FunctionCall const &node)        { Q_UNUSED(node); }
 //	virtual void visit(ast::MethodCall const &node)          { Q_UNUSED(node); }
