@@ -55,6 +55,38 @@ void HMLuaVisitor::visit(const ast::FloatNumber &node)
 	Q_UNUSED(node);
 }
 
+void HMLuaVisitor::visit(const ast::String &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	addConstraint(hm, mString);
+	Q_UNUSED(node);
+}
+
+void HMLuaVisitor::visit(const ast::True &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	addConstraint(hm, mBoolean);
+	Q_UNUSED(node);
+}
+
+void HMLuaVisitor::visit(const ast::False &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	addConstraint(hm, mBoolean);
+	Q_UNUSED(node);
+}
+
+void HMLuaVisitor::visit(const ast::Nil &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	addConstraint(hm, mNil);
+	Q_UNUSED(node);
+}
+
 int HMLuaVisitor::getNewId()
 {
 	return i++;
