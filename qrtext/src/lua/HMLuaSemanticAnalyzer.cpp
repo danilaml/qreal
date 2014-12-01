@@ -75,14 +75,7 @@ QSharedPointer<ast::Node> HMLuaSemanticAnalyzer::analyze(const QSharedPointer<as
 		return root;
 	}
 
-	for (auto child : root->children()) {
-		if (!child.isNull()) {
-			analyze(child);
-		}
-	}
-
-	mVisitor.setCurrentNode(root);
-	root->accept(mVisitor);
+	analyzeNode(root);
 
 	mVarTypes = mVisitor.getTypeVars();
 	mTypeConstraints = mVisitor.getTypeConstraints();
@@ -146,6 +139,17 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointe
 void HMLuaSemanticAnalyzer::substitute(QSharedPointer<HMTypeVariable> &type, QSharedPointer<HMTypeVariable> &with)
 {
 	//TODO: implement substitution
+}
+
+void HMLuaSemanticAnalyzer::analyzeNode(QSharedPointer<core::ast::Node> const &node)
+{
+	for (auto child : node->children()) {
+		if (!child.isNull()) {
+			analyzeNode(child);
+		}
+	}
+	mVisitor.setCurrentNode(node);
+	node->accept(mVisitor);
 }
 
 //void HMLuaSemanticAnalyzer::addIntrinsicFunction(QString const &name, QSharedPointer<types::Function> const &type)
