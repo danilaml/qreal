@@ -38,6 +38,6 @@ TEST_F(LuaHMSemanticAnalyzerTest, sanityCheck)
 	auto tree = parse("123");
 	mAnalyzer->analyze(tree);
 	EXPECT_TRUE(mErrors.empty());
-	//EXPECT_TRUE(mAnalyzer->type(tree)->is<Integer>());
-	//EXPECT_TRUE(mAnalyzer->type(tree)->is<Number>());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Integer>());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Number>());
 }
