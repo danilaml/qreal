@@ -51,13 +51,13 @@ TEST_F(LuaHMSemanticAnalyzerTest, floatNumber)
 	EXPECT_TRUE(mAnalyzer->type(tree)->is<Number>());
 }
 
-//TEST_F(LuaHMSemanticAnalyzerTest, string)
-//{
-//	auto tree = parse("Hello");
-//	mAnalyzer->analyze(tree);
-//	EXPECT_TRUE(mErrors.empty());
-//	EXPECT_TRUE(mAnalyzer->type(tree)->is<String>());
-//}
+TEST_F(LuaHMSemanticAnalyzerTest, string)
+{
+	auto tree = parse("\"Hello\"");
+	mAnalyzer->analyze(tree);
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<String>());
+}
 
 //TEST_F(LuaHMSemanticAnalyzerTest, booleanCheck)
 //{
