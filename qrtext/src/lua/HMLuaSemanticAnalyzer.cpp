@@ -96,6 +96,11 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::type(const QSharedP
 	}
 }
 
+void HMLuaSemanticAnalyzer::addIntrinsicFunction(const QString &name, const QSharedPointer<types::Function> &type)
+{
+	mIntrinsicFunctions.insert(name, type);
+}
+
 void HMLuaSemanticAnalyzer::solveConstraints()
 {
 	for (auto type : mVarTypes.values()) {

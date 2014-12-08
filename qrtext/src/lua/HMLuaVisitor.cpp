@@ -5,7 +5,6 @@
 
 #include "qrtext/lua/types/boolean.h"
 #include "qrtext/lua/types/float.h"
-#include "qrtext/lua/types/function.h"
 #include "qrtext/lua/types/integer.h"
 #include "qrtext/lua/types/nil.h"
 #include "qrtext/lua/types/number.h"
@@ -120,4 +119,19 @@ void HMLuaVisitor::addConstraint(QSharedPointer<HMTypeVariable> &to, QSharedPoin
 		mTypeConstraints.insert(to, QSharedPointer<ConstrainSet>(new ConstrainSet()));
 	}
 	mTypeConstraints.value(to)->insert(constraint);
+}
+
+bool HMLuaVisitor::hasDeclaration(const QString &identifierName) const
+{
+	return mIdentifierDeclarations.contains(identifierName);
+}
+
+QSharedPointer<core::ast::Node> HMLuaVisitor::declaration(const QString &identifierName) const
+{
+	return mIdentifierDeclarations.value(identifierName);
+}
+
+void HMLuaVisitor::addDeclaration(const QString &identifierName, const QSharedPointer<core::ast::Node> &declaration)
+{
+	mIdentifierDeclarations.insert(identifierName, declaration);
 }
