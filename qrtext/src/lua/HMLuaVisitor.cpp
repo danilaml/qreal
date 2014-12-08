@@ -55,6 +55,28 @@ void HMLuaVisitor::visit(const ast::FloatNumber &node)
 	Q_UNUSED(node);
 }
 
+void HMLuaVisitor::visit(const ast::FieldInitialization &node)
+{
+//	visit(as<ast::FieldInitialization>(node)->value());
+//	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+//	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+//	addConstraint(hm, type(as<ast::FieldInitialization>(node)->value()));
+	Q_UNUSED(node);
+}
+
+void HMLuaVisitor::visit(const ast::TableConstructor &node)
+{
+//	auto tableConstructor = as<ast::TableConstructor>(node);
+//	auto elementType = tableConstructor->initializers().isEmpty()
+//			? any()
+//			: type(tableConstructor->initializers().first());
+//	auto tableType = QSharedPointer<HMTypeVariable>(new types::Table(elementType, tableConstructor->initializers().size()));
+//	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+//	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+//	addConstraint(hm, tableType);
+	Q_UNUSED(node);
+}
+
 void HMLuaVisitor::visit(const ast::String &node)
 {
 	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
