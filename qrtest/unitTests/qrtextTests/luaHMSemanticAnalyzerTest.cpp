@@ -33,11 +33,52 @@ QSharedPointer<qrtext::core::ast::Node> LuaHMSemanticAnalyzerTest::parse(QString
 	return mParser->parse(mLexer->tokenize(code), mLexer->userFriendlyTokenNames());
 }
 
-TEST_F(LuaHMSemanticAnalyzerTest, sanityCheck)
+TEST_F(LuaHMSemanticAnalyzerTest, integerNumber)
 {
-	auto tree = parse("123");
+	auto tree = parse("239");
 	mAnalyzer->analyze(tree);
 	EXPECT_TRUE(mErrors.empty());
 	EXPECT_TRUE(mAnalyzer->type(tree)->is<Integer>());
 	EXPECT_TRUE(mAnalyzer->type(tree)->is<Number>());
 }
+
+TEST_F(LuaHMSemanticAnalyzerTest, floatNumber)
+{
+	auto tree = parse("125.25");
+	mAnalyzer->analyze(tree);
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Float>());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Number>());
+}
+
+//TEST_F(LuaHMSemanticAnalyzerTest, string)
+//{
+//	auto tree = parse("Hello");
+//	mAnalyzer->analyze(tree);
+//	EXPECT_TRUE(mErrors.empty());
+//	EXPECT_TRUE(mAnalyzer->type(tree)->is<String>());
+//}
+
+//TEST_F(LuaHMSemanticAnalyzerTest, booleanCheck)
+//{
+//	auto tree = parse("1 == 1");
+//	mAnalyzer->analyze(tree);
+//	EXPECT_TRUE(mErrors.empty());
+//	EXPECT_TRUE(mAnalyzer->type(tree)->is<Boolean>());
+//}
+
+//TEST_F(LuaHMSemanticAnalyzerTest, assignment)
+//{
+//	auto tree = parse("a = 123");
+
+//	auto variable = as<lua::ast::Assignment>(tree)->variable();
+//	auto value = as<lua::ast::Assignment>(tree)->value();
+
+//	mAnalyzer->analyze(tree);
+
+//	EXPECT_TRUE(mErrors.empty());
+//	EXPECT_TRUE(mAnalyzer->type(variable)->is<types::Integer>());
+//	EXPECT_TRUE(mAnalyzer->type(value)->is<types::Integer>());
+//}
+
+
