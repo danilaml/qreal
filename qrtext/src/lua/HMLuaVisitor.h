@@ -2,6 +2,8 @@
 
 #include <QSharedPointer>
 
+#include "qrtext/lua/types/function.h"
+
 #include "qrtext/lua/luaAstVisitorInterface.h"
 #include "qrtext/core/types/typeExpression.h"
 #include "qrtext/src/hm/HMTypeVariable.h"
@@ -64,10 +66,21 @@ private:
 	int getNewId();
 	void addConstraint(QSharedPointer<HMTypeVariable> &to, QSharedPointer<core::types::TypeExpression> &constraint);
 
+	/// Returns true, if given identifier was declared (or seen before).
+	bool hasDeclaration(QString const &identifierName) const;
+
+	/// Returns expression where given identifier was declared or encountered first.
+	QSharedPointer<core::ast::Node> declaration(QString const &identifierName) const;
+
+	/// Adds declaration of a given identifier to identifiers table.
+	void addDeclaration(QString const &identifierName, QSharedPointer<core::ast::Node> const &declaration);
+
 	int i;
 	QSharedPointer<core::ast::Node> mNode; //current node
 	QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> mTypeVars;
 	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<ConstrainSet>> mTypeConstraints;
+	QHash<QString, QSharedPointer<core::ast::Node>> mIdentifierDeclarations;
+	QHash<QString, QSharedPointer<types::Function>> mIntrinsicFunctions;
 
 	QSharedPointer<core::types::TypeExpression> mBoolean;
 	QSharedPointer<core::types::TypeExpression> mFloat;
