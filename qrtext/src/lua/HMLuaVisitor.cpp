@@ -13,6 +13,7 @@
 
 #include "qrtext/lua/ast/assignment.h"
 #include "qrtext/lua/ast/unaryMinus.h"
+#include "qrtext/lua/ast/identifier.h"
 
 using namespace qrtext;
 using namespace lua;
@@ -43,9 +44,20 @@ QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<HMLuaVisitor::ConstrainSet>
 
 void HMLuaVisitor::visit(const ast::UnaryMinus &node)
 {
-	auto operand = as<ast::Node>(node.operand());
+//	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+//	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+//	QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(node.operand());
+//	QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
+//	addConstraint(operandTypeVariable, mInteger);
+//	addConstraint(operandTypeVariable, mFloat);
+//	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
+//		 addConstraint(hm, constraint);
+//	}
+}
 
-	//visit(operand);
+void HMLuaVisitor::visit(const ast::Addition &node)
+{
+	Q_UNUSED(node);
 }
 
 void HMLuaVisitor::visit(const ast::IntegerNumber &node)
@@ -116,6 +128,24 @@ void HMLuaVisitor::visit(const ast::Nil &node)
 	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
 	addConstraint(hm, mNil);
 	Q_UNUSED(node);
+}
+
+void HMLuaVisitor::visit(const ast::Identifier &node)
+{
+	if (hasDeclaration(node.name())) {
+		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+		mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+		QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(declaration(node.name()));
+		QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
+		for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
+			addConstraint(hm, constraint);
+		}
+	} else {
+//		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+//		mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+//		addConstraint(hm, );
+		addDeclaration(node.name(), mNode);
+	}
 }
 
 void HMLuaVisitor::visit(const ast::Assignment &node)
