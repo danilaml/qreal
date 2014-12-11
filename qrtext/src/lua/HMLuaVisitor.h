@@ -28,7 +28,7 @@ public:
 //	virtual void visit(ast::Length const &node)              { Q_UNUSED(node); }
 //	virtual void visit(ast::LogicalAnd const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::LogicalOr const &node)           { Q_UNUSED(node); }
-//	virtual void visit(ast::Addition const &node)            { Q_UNUSED(node); }
+	virtual void visit(ast::Addition const &node);
 //	virtual void visit(ast::Subtraction const &node)         { Q_UNUSED(node); }
 //	virtual void visit(ast::Multiplication const &node)      { Q_UNUSED(node); }
 //	virtual void visit(ast::Division const &node)            { Q_UNUSED(node); }
@@ -55,7 +55,7 @@ public:
 	virtual void visit(ast::True const &node);
 	virtual void visit(ast::False const &node);
 	virtual void visit(ast::Nil const &node);
-//	virtual void visit(ast::Identifier const &node)          { Q_UNUSED(node); }
+	virtual void visit(ast::Identifier const &node);
 //	virtual void visit(ast::FunctionCall const &node)        { Q_UNUSED(node); }
 //	virtual void visit(ast::MethodCall const &node)          { Q_UNUSED(node); }
 	virtual void visit(ast::Assignment const &node);

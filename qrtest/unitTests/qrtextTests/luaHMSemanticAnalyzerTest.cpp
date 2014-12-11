@@ -96,14 +96,14 @@ TEST_F(LuaHMSemanticAnalyzerTest, assignment)
 	EXPECT_TRUE(mAnalyzer->type(value)->is<Integer>());
 }
 
-//TEST_F(LuaSemanticAnalyzerTest, unaryOperator)
-//{
-//	auto tree = parse("-123");
+TEST_F(LuaSemanticAnalyzerTest, unaryOperator)
+{
+	auto tree = parse("-123");
 
-//	mAnalyzer->analyze(tree);
+	mAnalyzer->analyze(tree);
 
-//	EXPECT_TRUE(mErrors.empty());
-//	EXPECT_TRUE(mAnalyzer->type(as<ast::UnaryMinus>(tree))->is<types::Integer>());
-//}
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(as<ast::UnaryMinus>(tree))->is<types::Integer>());
+}
 
 
