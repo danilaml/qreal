@@ -22,7 +22,7 @@ public:
 	QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<ConstrainSet>> getTypeConstraints() const;
 
 //	virtual void visit(ast::Number const &node)              { Q_UNUSED(node); }
-//	virtual void visit(ast::UnaryMinus const &node)          { Q_UNUSED(node); }
+	virtual void visit(ast::UnaryMinus const &node);
 //	virtual void visit(ast::Not const &node)                 { Q_UNUSED(node); }
 //	virtual void visit(ast::BitwiseNegation const &node)     { Q_UNUSED(node); }
 //	virtual void visit(ast::Length const &node)              { Q_UNUSED(node); }
@@ -58,7 +58,7 @@ public:
 //	virtual void visit(ast::Identifier const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::FunctionCall const &node)        { Q_UNUSED(node); }
 //	virtual void visit(ast::MethodCall const &node)          { Q_UNUSED(node); }
-//	virtual void visit(ast::Assignment const &node)          { Q_UNUSED(node); }
+	virtual void visit(ast::Assignment const &node);
 //	virtual void visit(ast::Block const &node)               { Q_UNUSED(node); }
 //	virtual void visit(ast::IndexingExpression const &node)  { Q_UNUSED(node); }
 
