@@ -11,6 +11,9 @@
 #include "qrtext/lua/types/string.h"
 #include "qrtext/lua/types/table.h"
 
+#include "qrtext/lua/ast/assignment.h"
+#include "qrtext/lua/ast/unaryMinus.h"
+
 using namespace qrtext;
 using namespace lua;
 
@@ -36,6 +39,13 @@ QHash<QSharedPointer<core::ast::Expression>, QSharedPointer<HMTypeVariable>> HML
 QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<HMLuaVisitor::ConstrainSet> > HMLuaVisitor::getTypeConstraints() const
 {
 	return mTypeConstraints;
+}
+
+void HMLuaVisitor::visit(const ast::UnaryMinus &node)
+{
+	auto operand = as<ast::Node>(node.operand());
+
+	//visit(operand);
 }
 
 void HMLuaVisitor::visit(const ast::IntegerNumber &node)
@@ -106,6 +116,16 @@ void HMLuaVisitor::visit(const ast::Nil &node)
 	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
 	addConstraint(hm, mNil);
 	Q_UNUSED(node);
+}
+
+void HMLuaVisitor::visit(const ast::Assignment &node)
+{
+	auto valueTypeVariable = mTypeVars.value(node.value());
+	QSharedPointer<ast::Expression> variable = node.variable();
+	QSharedPointer<HMTypeVariable> typeVariableForVariable = mTypeVars.value(variable);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(valueTypeVariable)->values()) {
+		 addConstraint(typeVariableForVariable, constraint);
+	}
 }
 
 int HMLuaVisitor::getNewId()
