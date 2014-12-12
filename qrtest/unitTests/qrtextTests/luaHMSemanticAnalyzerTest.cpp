@@ -103,7 +103,7 @@ TEST_F(LuaHMSemanticAnalyzerTest, unaryOperator)
 	mAnalyzer->analyze(tree);
 
 	EXPECT_TRUE(mErrors.empty());
-	EXPECT_TRUE(mAnalyzer->type(as<lua::ast::UnaryMinus>(tree))->is<Integer>());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Integer>());
 }
 
 TEST_F(LuaHMSemanticAnalyzerTest, addition)
