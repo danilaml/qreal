@@ -155,4 +155,14 @@ TEST_F(LuaHMSemanticAnalyzerTest, division)
 	EXPECT_TRUE(mAnalyzer->type(tree)->is<Float>());
 }
 
+TEST_F(LuaHMSemanticAnalyzerTest, integerDivision)
+{
+	auto tree = parse("10//7");
+
+	mAnalyzer->analyze(tree);
+
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Integer>());
+}
+
 
