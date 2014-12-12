@@ -133,13 +133,13 @@ void HMLuaVisitor::visit(const ast::Nil &node)
 void HMLuaVisitor::visit(const ast::Identifier &node)
 {
 	if (hasDeclaration(node.name())) {
-		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
-		mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
-		QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(declaration(node.name()));
-		QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
-		for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
-			addConstraint(hm, constraint);
-		}
+//		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+		mTypeVars.insert(as<core::ast::Expression>(mNode), mTypeVars.value(as<ast::Expression>(mIdentifierDeclarations.value(node.name()))));
+//		QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(declaration(node.name()));
+//		QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
+//		for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
+//			addConstraint(hm, constraint);
+//		}
 	} else {
 //		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
 //		mTypeVars.insert(as<core::ast::Expression>(mNode), hm);

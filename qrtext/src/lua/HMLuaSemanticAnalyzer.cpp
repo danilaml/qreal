@@ -56,6 +56,8 @@
 #include "qrtext/lua/ast/nil.h"
 #include "qrtext/lua/ast/string.h"
 
+#include <iostream>
+
 using namespace qrtext::lua::details;
 using namespace qrtext::core;
 
@@ -89,9 +91,12 @@ QSharedPointer<ast::Node> HMLuaSemanticAnalyzer::analyze(const QSharedPointer<as
 QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::type(const QSharedPointer<ast::Node> &expression) const
 {
 	auto castedExpression = as<ast::Expression>(expression);
+	std::cout << mVarTypes.count() << std::endl;
 	if (mVarTypes.contains(castedExpression)) {
+		std::cout << "return type " << mTypeConstraints.value(mVarTypes.value(castedExpression))->values().at(0)->toString().toStdString() << std::endl;
 		return mTypeConstraints.value(mVarTypes.value(castedExpression))->values().at(0); // for now
 	} else {
+		std::cout << "return type Any" << std::endl;
 		return core::wrap(new core::types::Any());
 	}
 }
@@ -103,7 +108,7 @@ void HMLuaSemanticAnalyzer::addIntrinsicFunction(const QString &name, const QSha
 
 void HMLuaSemanticAnalyzer::solveConstraints()
 {
-	for (auto type : mVarTypes.values()) {
+	for (auto type : mTypeConstraints.keys()) {
 		solveConstraints(type);
 	}
 }
@@ -111,13 +116,17 @@ void HMLuaSemanticAnalyzer::solveConstraints()
 QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::solveConstraints(QSharedPointer<HMTypeVariable> &type)
 {
 	auto constraints = mTypeConstraints.value(type)->values();
+
+	std::cout << constraints.at(0)->toString().toStdString() << std::endl;
+
 	if (constraints.isEmpty()) {
 //		reportError(operation, QObject::tr("Type mismatch."));
 	}
-	QSharedPointer<core::types::TypeExpression> unifiedType = constraints.at(0);
+	QSharedPointer<core::types::TypeExpression> unifiedType = any();
 	for (auto c : constraints) {
 		unifiedType = unify(unifiedType, c);
 	}
+	std::cout << "return type " << unifiedType->toString().toStdString() << std::endl;
 	return unifiedType;
 }
 
@@ -129,12 +138,30 @@ bool HMLuaSemanticAnalyzer::isOfBaseType(QSharedPointer<core::types::TypeExpress
 QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointer<core::types::TypeExpression> &leftexpr
                                                                    , QSharedPointer<core::types::TypeExpression> &rightexpr)
 {
-	if (isOfBaseType(leftexpr)) {
-		return leftexpr;
-	} else if (!isOfBaseType(rightexpr)) {
-//		auto rightvar = as<HMTypeVariable>(leftexpr);
-//		substitute(leftexpr, rightvar);
-//		return solveConstraints(rightvar);
+	if (rightexpr->is<HMTypeVariable>()) {
+		auto rightvar = as<HMTypeVariable>(rightexpr);
+		return unify(leftexpr, rightvar);
+	} else if (leftexpr->is<core::types::Any>()) {
+		return rightexpr;
+	} else if (isOfBaseType(leftexpr)) {
+		if (generalizationsTable().isGeneralization(leftexpr, rightexpr) || rightexpr->is<core::types::Any>()) {
+			return leftexpr; // right or left? right is more general one
+//			return rightexpr;
+		} else {
+			return leftexpr;
+			//report error? type mismatch?
+		}
+	} else {
+		return rightexpr; //not needed?
+	}
+}
+
+QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::unify(QSharedPointer<core::types::TypeExpression> &leftexpr
+                                                                   , QSharedPointer<HMTypeVariable> &rightexpr)
+{
+	if (leftexpr->is<core::types::Any>()) {
+		return rightexpr;
+	} else if (isOfBaseType(leftexpr)) {
 		return leftexpr;
 	} else {
 		return rightexpr; // rewrite this.
@@ -153,6 +180,7 @@ void HMLuaSemanticAnalyzer::analyzeNode(QSharedPointer<core::ast::Node> const &n
 			analyzeNode(child);
 		}
 	}
+	std::cout << "return type " << node->
 	mVisitor.setCurrentNode(node);
 	node->accept(mVisitor);
 }
