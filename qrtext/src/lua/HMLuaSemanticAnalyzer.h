@@ -31,7 +31,8 @@ private:
 	void solveConstraints();
 	QSharedPointer<core::types::TypeExpression> solveConstraints(QSharedPointer<HMTypeVariable> &type);
 	bool isOfBaseType(QSharedPointer<core::types::TypeExpression> &expr) const;
-	QSharedPointer<core::types::TypeExpression> unify(QSharedPointer<core::types::TypeExpression> &tvar, QSharedPointer<core::types::TypeExpression> &texp);
+	QSharedPointer<core::types::TypeExpression> unify(QSharedPointer<core::types::TypeExpression> &leftexpr, QSharedPointer<core::types::TypeExpression> &rightexpr);
+	QSharedPointer<core::types::TypeExpression> unify(QSharedPointer<core::types::TypeExpression> &leftexpr, QSharedPointer<HMTypeVariable> &rightexpr);
 	void substitute(QSharedPointer<HMTypeVariable> &type, QSharedPointer<HMTypeVariable> &with);
 
 	HMLuaVisitor mVisitor;
