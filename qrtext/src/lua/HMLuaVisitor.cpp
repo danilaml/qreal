@@ -16,6 +16,8 @@
 #include "qrtext/lua/ast/identifier.h"
 #include "qrtext/lua/ast/addition.h"
 
+#include <iostream>
+
 using namespace qrtext;
 using namespace lua;
 
@@ -149,6 +151,7 @@ void HMLuaVisitor::visit(const ast::Nil &node)
 
 void HMLuaVisitor::visit(const ast::Identifier &node)
 {
+	std::cout << node.name().toStdString() << std::endl;
 	if (hasDeclaration(node.name())) {
 //		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
 		mTypeVars.insert(as<core::ast::Expression>(mNode), mTypeVars.value(as<ast::Expression>(mIdentifierDeclarations.value(node.name()))));
@@ -200,5 +203,8 @@ QSharedPointer<core::ast::Node> HMLuaVisitor::declaration(const QString &identif
 
 void HMLuaVisitor::addDeclaration(const QString &identifierName, const QSharedPointer<core::ast::Node> &declaration)
 {
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(declaration), hm);
+	mTypeConstraints.insert(hm, QSharedPointer<ConstrainSet>(new ConstrainSet()));
 	mIdentifierDeclarations.insert(identifierName, declaration);
 }

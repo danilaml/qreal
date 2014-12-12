@@ -96,7 +96,7 @@ QSharedPointer<types::TypeExpression> HMLuaSemanticAnalyzer::type(const QSharedP
 		std::cout << "return type " << mTypeConstraints.value(mVarTypes.value(castedExpression))->values().at(0)->toString().toStdString() << std::endl;
 		return mTypeConstraints.value(mVarTypes.value(castedExpression))->values().at(0); // for now
 	} else {
-		std::cout << "return type Any" << std::endl;
+		std::cout << "return type AnyType" << std::endl;
 		return core::wrap(new core::types::Any());
 	}
 }
