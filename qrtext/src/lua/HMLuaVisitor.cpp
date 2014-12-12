@@ -15,8 +15,11 @@
 #include "qrtext/lua/ast/unaryMinus.h"
 #include "qrtext/lua/ast/identifier.h"
 #include "qrtext/lua/ast/addition.h"
-
-#include <iostream>
+#include "qrtext/lua/ast/subtraction.h"
+#include "qrtext/lua/ast/multiplication.h"
+#include "qrtext/lua/ast/division.h"
+#include "qrtext/lua/ast/integerDivision.h"
+#include "qrtext/lua/ast/fieldInitialization.h"
 
 using namespace qrtext;
 using namespace lua;
@@ -51,8 +54,6 @@ void HMLuaVisitor::visit(const ast::UnaryMinus &node)
 	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
 	QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(node.operand());
 	QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
-	//addConstraint(operandTypeVariable, mInteger);
-	//addConstraint(operandTypeVariable, mFloat);
 	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
 		 addConstraint(hm, constraint);
 	}
@@ -64,19 +65,80 @@ void HMLuaVisitor::visit(const ast::Addition &node)
 	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
 	QSharedPointer<core::ast::Expression> leftOperand = as<core::ast::Expression>(node.leftOperand());
 	QSharedPointer<HMTypeVariable> leftTypeVariable = mTypeVars.value(leftOperand);
-	addConstraint(leftTypeVariable, mInteger);
-	addConstraint(leftTypeVariable, mFloat);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(leftTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
 	QSharedPointer<core::ast::Expression> rightOperand = as<core::ast::Expression>(node.rightOperand());
 	QSharedPointer<HMTypeVariable> rightTypeVariable = mTypeVars.value(rightOperand);
-	addConstraint(rightTypeVariable, mInteger);
-	addConstraint(rightTypeVariable, mFloat);
-	if (mTypeVars.value(leftOperand)->isResolved() && mTypeVars.value(leftOperand)->finalType() == mInteger
-			&& mTypeVars.value(rightOperand)->isResolved() && mTypeVars.value(rightOperand)->finalType() == mInteger)
-	{
-		addConstraint(hm, mInteger);
-	} else {
-		addConstraint(hm, mFloat);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(rightTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
 	}
+}
+
+void HMLuaVisitor::visit(const ast::Subtraction &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	QSharedPointer<core::ast::Expression> leftOperand = as<core::ast::Expression>(node.leftOperand());
+	QSharedPointer<HMTypeVariable> leftTypeVariable = mTypeVars.value(leftOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(leftTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+	QSharedPointer<core::ast::Expression> rightOperand = as<core::ast::Expression>(node.rightOperand());
+	QSharedPointer<HMTypeVariable> rightTypeVariable = mTypeVars.value(rightOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(rightTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+}
+
+void HMLuaVisitor::visit(const ast::Multiplication &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	QSharedPointer<core::ast::Expression> leftOperand = as<core::ast::Expression>(node.leftOperand());
+	QSharedPointer<HMTypeVariable> leftTypeVariable = mTypeVars.value(leftOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(leftTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+	QSharedPointer<core::ast::Expression> rightOperand = as<core::ast::Expression>(node.rightOperand());
+	QSharedPointer<HMTypeVariable> rightTypeVariable = mTypeVars.value(rightOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(rightTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+}
+
+void HMLuaVisitor::visit(const ast::Division &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	QSharedPointer<core::ast::Expression> leftOperand = as<core::ast::Expression>(node.leftOperand());
+	QSharedPointer<HMTypeVariable> leftTypeVariable = mTypeVars.value(leftOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(leftTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+	QSharedPointer<core::ast::Expression> rightOperand = as<core::ast::Expression>(node.rightOperand());
+	QSharedPointer<HMTypeVariable> rightTypeVariable = mTypeVars.value(rightOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(rightTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+	addConstraint(hm, mFloat);
+}
+
+void HMLuaVisitor::visit(const ast::IntegerDivision &node)
+{
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	QSharedPointer<core::ast::Expression> leftOperand = as<core::ast::Expression>(node.leftOperand());
+	QSharedPointer<HMTypeVariable> leftTypeVariable = mTypeVars.value(leftOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(leftTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+	QSharedPointer<core::ast::Expression> rightOperand = as<core::ast::Expression>(node.rightOperand());
+	QSharedPointer<HMTypeVariable> rightTypeVariable = mTypeVars.value(rightOperand);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(rightTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
+	addConstraint(hm, mInteger);
 }
 
 void HMLuaVisitor::visit(const ast::IntegerNumber &node)
@@ -97,24 +159,12 @@ void HMLuaVisitor::visit(const ast::FloatNumber &node)
 
 void HMLuaVisitor::visit(const ast::FieldInitialization &node)
 {
-//	visit(as<ast::FieldInitialization>(node)->value());
-//	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
-//	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
-//	addConstraint(hm, type(as<ast::FieldInitialization>(node)->value()));
-	Q_UNUSED(node);
-}
-
-void HMLuaVisitor::visit(const ast::TableConstructor &node)
-{
-//	auto tableConstructor = as<ast::TableConstructor>(node);
-//	auto elementType = tableConstructor->initializers().isEmpty()
-//			? any()
-//			: type(tableConstructor->initializers().first());
-//	auto tableType = QSharedPointer<HMTypeVariable>(new types::Table(elementType, tableConstructor->initializers().size()));
-//	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
-//	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
-//	addConstraint(hm, tableType);
-	Q_UNUSED(node);
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	auto valueTypeVariable = mTypeVars.value(node.value());
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(valueTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
 }
 
 void HMLuaVisitor::visit(const ast::String &node)
@@ -151,19 +201,9 @@ void HMLuaVisitor::visit(const ast::Nil &node)
 
 void HMLuaVisitor::visit(const ast::Identifier &node)
 {
-	std::cout << node.name().toStdString() << std::endl;
 	if (hasDeclaration(node.name())) {
-//		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
 		mTypeVars.insert(as<core::ast::Expression>(mNode), mTypeVars.value(as<ast::Expression>(mIdentifierDeclarations.value(node.name()))));
-//		QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(declaration(node.name()));
-//		QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
-//		for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
-//			addConstraint(hm, constraint);
-//		}
 	} else {
-//		auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
-//		mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
-//		addConstraint(hm, );
 		addDeclaration(node.name(), mNode);
 	}
 }

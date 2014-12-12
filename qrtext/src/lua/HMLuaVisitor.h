@@ -29,10 +29,10 @@ public:
 //	virtual void visit(ast::LogicalAnd const &node)          { Q_UNUSED(node); }
 //	virtual void visit(ast::LogicalOr const &node)           { Q_UNUSED(node); }
 	virtual void visit(ast::Addition const &node);
-//	virtual void visit(ast::Subtraction const &node)         { Q_UNUSED(node); }
-//	virtual void visit(ast::Multiplication const &node)      { Q_UNUSED(node); }
-//	virtual void visit(ast::Division const &node)            { Q_UNUSED(node); }
-//	virtual void visit(ast::IntegerDivision const &node)     { Q_UNUSED(node); }
+	virtual void visit(ast::Subtraction const &node);
+	virtual void visit(ast::Multiplication const &node);
+	virtual void visit(ast::Division const &node);
+	virtual void visit(ast::IntegerDivision const &node);
 //	virtual void visit(ast::Modulo const &node)              { Q_UNUSED(node); }
 //	virtual void visit(ast::Exponentiation const &node)      { Q_UNUSED(node); }
 //	virtual void visit(ast::BitwiseAnd const &node)          { Q_UNUSED(node); }
@@ -50,7 +50,7 @@ public:
 	virtual void visit(ast::IntegerNumber const &node);
 	virtual void visit(ast::FloatNumber const &node);
 	virtual void visit(ast::FieldInitialization const &node);
-	virtual void visit(ast::TableConstructor const &node);
+//	virtual void visit(ast::TableConstructor const &node)    { Q_UNUSED(node); }
 	virtual void visit(ast::String const &node);
 	virtual void visit(ast::True const &node);
 	virtual void visit(ast::False const &node);

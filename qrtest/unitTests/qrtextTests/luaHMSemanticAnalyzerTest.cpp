@@ -108,12 +108,51 @@ TEST_F(LuaHMSemanticAnalyzerTest, unaryOperator)
 
 TEST_F(LuaHMSemanticAnalyzerTest, addition)
 {
-	auto tree = parse("5+5");
+	auto treeInteger = parse("1+1");
+	auto treeFloat = parse("1.0+1.0");
+
+	mAnalyzer->analyze(treeInteger);
+	mAnalyzer->analyze(treeFloat);
+
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(treeInteger)->is<Integer>());
+	EXPECT_TRUE(mAnalyzer->type(treeFloat)->is<Float>());
+}
+
+TEST_F(LuaHMSemanticAnalyzerTest, subtraction)
+{
+	auto treeInteger = parse("1-1");
+	auto treeFloat = parse("1.0-1.0");
+
+	mAnalyzer->analyze(treeInteger);
+	mAnalyzer->analyze(treeFloat);
+
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(treeInteger)->is<Integer>());
+	EXPECT_TRUE(mAnalyzer->type(treeFloat)->is<Float>());
+}
+
+TEST_F(LuaHMSemanticAnalyzerTest, multiplication)
+{
+	auto treeInteger = parse("5*1");
+	auto treeFloat = parse("5.0*1.0");
+
+	mAnalyzer->analyze(treeInteger);
+	mAnalyzer->analyze(treeFloat);
+
+	EXPECT_TRUE(mErrors.empty());
+	EXPECT_TRUE(mAnalyzer->type(treeInteger)->is<Integer>());
+	EXPECT_TRUE(mAnalyzer->type(treeFloat)->is<Float>());
+}
+
+TEST_F(LuaHMSemanticAnalyzerTest, division)
+{
+	auto tree = parse("5.5/1.1");
 
 	mAnalyzer->analyze(tree);
 
 	EXPECT_TRUE(mErrors.empty());
-	//EXPECT_TRUE(mAnalyzer->type(as<lua::ast::Addition>(tree))->is<Integer>());
+	EXPECT_TRUE(mAnalyzer->type(tree)->is<Float>());
 }
 
 
