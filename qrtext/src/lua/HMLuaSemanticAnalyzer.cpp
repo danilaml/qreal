@@ -180,7 +180,7 @@ void HMLuaSemanticAnalyzer::analyzeNode(QSharedPointer<core::ast::Node> const &n
 			analyzeNode(child);
 		}
 	}
-	std::cout << "return type " << node->
+//	std::cout << "return type "
 	mVisitor.setCurrentNode(node);
 	node->accept(mVisitor);
 }
