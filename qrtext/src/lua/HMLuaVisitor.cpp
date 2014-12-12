@@ -14,6 +14,7 @@
 #include "qrtext/lua/ast/assignment.h"
 #include "qrtext/lua/ast/unaryMinus.h"
 #include "qrtext/lua/ast/identifier.h"
+#include "qrtext/lua/ast/addition.h"
 
 using namespace qrtext;
 using namespace lua;
@@ -44,20 +45,36 @@ QHash<QSharedPointer<HMTypeVariable>, QSharedPointer<HMLuaVisitor::ConstrainSet>
 
 void HMLuaVisitor::visit(const ast::UnaryMinus &node)
 {
-//	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
-//	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
-//	QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(node.operand());
-//	QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
-//	addConstraint(operandTypeVariable, mInteger);
-//	addConstraint(operandTypeVariable, mFloat);
-//	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
-//		 addConstraint(hm, constraint);
-//	}
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	QSharedPointer<core::ast::Expression> operand = as<core::ast::Expression>(node.operand());
+	QSharedPointer<HMTypeVariable> operandTypeVariable = mTypeVars.value(operand);
+	//addConstraint(operandTypeVariable, mInteger);
+	//addConstraint(operandTypeVariable, mFloat);
+	for (QSharedPointer<core::types::TypeExpression> constraint : mTypeConstraints.value(operandTypeVariable)->values()) {
+		 addConstraint(hm, constraint);
+	}
 }
 
 void HMLuaVisitor::visit(const ast::Addition &node)
 {
-	Q_UNUSED(node);
+	auto hm = QSharedPointer<HMTypeVariable>(new HMTypeVariable(getNewId()));
+	mTypeVars.insert(as<core::ast::Expression>(mNode), hm);
+	QSharedPointer<core::ast::Expression> leftOperand = as<core::ast::Expression>(node.leftOperand());
+	QSharedPointer<HMTypeVariable> leftTypeVariable = mTypeVars.value(leftOperand);
+	addConstraint(leftTypeVariable, mInteger);
+	addConstraint(leftTypeVariable, mFloat);
+	QSharedPointer<core::ast::Expression> rightOperand = as<core::ast::Expression>(node.rightOperand());
+	QSharedPointer<HMTypeVariable> rightTypeVariable = mTypeVars.value(rightOperand);
+	addConstraint(rightTypeVariable, mInteger);
+	addConstraint(rightTypeVariable, mFloat);
+	if (mTypeVars.value(leftOperand)->isResolved() && mTypeVars.value(leftOperand)->finalType() == mInteger
+			&& mTypeVars.value(rightOperand)->isResolved() && mTypeVars.value(rightOperand)->finalType() == mInteger)
+	{
+		addConstraint(hm, mInteger);
+	} else {
+		addConstraint(hm, mFloat);
+	}
 }
 
 void HMLuaVisitor::visit(const ast::IntegerNumber &node)
