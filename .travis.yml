@@ -21,7 +21,6 @@ env:
 before_install:
   - if [ "$TESTS" != "true" ]; then pip install --user codecov; fi
   - if [ "$CXX" = "g++" ]; then export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'; fi
-  - export CXX="g++-4.9" CC="gcc-4.9"
 
 install:
   - if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
@@ -29,6 +28,7 @@ install:
   - if [ "$CXX" = "g++" ]; then sudo apt-get install g++-4.9 -y; fi
   - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 50; fi
   - if [ "$CXX" = "g++" ]; then sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50; fi
+  - export CXX="g++-4.9" CC="gcc-4.9"
   - sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 10C56D0DE9977759
   - sudo add-apt-repository "deb http://ppa.launchpad.net/beineri/opt-qt551-trusty/ubuntu trusty main"
   - sudo add-apt-repository ppa:smspillaz/verapp-latest -y
