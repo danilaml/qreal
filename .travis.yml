@@ -21,7 +21,7 @@ env:
 before_install:
   - if [ "$TESTS" != "true" ]; then pip install --user codecov; fi
   - if [ "$CXX" = "g++" ]; then export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'; fi
-  - export CXX="g++-5" CC="gcc-5"
+  - export CXX="g++-4.9" CC="gcc-4.9"
 
 install:
   - if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
