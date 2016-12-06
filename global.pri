@@ -60,9 +60,9 @@ macx {
 }
 
 unix:!macx {
-	CONFIG(debug):!CONFIG(sanitize_address):!CONFIG(sanitize_thread):!CONFIG(sanitize_memory):!CONFIG(sanitize_kernel_address) {
+        !CONFIG(sanitize_address):!CONFIG(sanitize_thread):!CONFIG(sanitize_memory):!CONFIG(sanitize_kernel_address) {
 		# Ubsan is turned on by default into debug build
-		CONFIG += sanitizer sanitize_undefined
+                CONFIG += sanitizer sanitize_undefined sanitize_leak
 	}
 
 	linux-g++:CONFIG(sanitize_undefined):system( g++ --version | grep -e "\<5.[0-9]" ) {
@@ -90,7 +90,7 @@ INCLUDEPATH += $$_PRO_FILE_PWD_ \
 LIBS += -L$$DESTDIR
 
 CONFIG += c++14
-QMAKE_CXXFLAGS += -Wextra -Wcast-qual -Wwrite-strings -Wredundant-decls -Wunreachable-code -Wnon-virtual-dtor
+QMAKE_CXXFLAGS += -Wextra -Wcast-qual -Wwrite-strings -Wredundant-decls -Wunreachable-code -Wnon-virtual-dtor -fsanitize=leak
 
 GLOBAL_PWD = $$PWD
 
