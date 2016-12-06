@@ -23,7 +23,7 @@
 #include <twoDModel/robotModel/twoDRobotModel.h>
 
 #include "interpreterCore/managers/kitAutoSwitcher.h"
-#include "interpreterCore/interpreter/interpreter.h"
+#include "interpreterCore/interpreter/blockInterpreter.h"
 #include "src/coreBlocks/coreBlocksFactory.h"
 #include "src/ui/robotsSettingsPage.h"
 #include "src/managers/exerciseExportManager.h"
@@ -89,7 +89,7 @@ void RobotsPluginFacade::init(const qReal::PluginConfigurator &configurer)
 			, mEventsForKitPlugin
 			, mRobotModelManager));
 
-	interpreter::Interpreter *interpreter = new interpreter::Interpreter(
+	interpreter::BlockInterpreter *interpreter = new interpreter::BlockInterpreter(
 			configurer.graphicalModelApi()
 			, configurer.logicalModelApi()
 			, configurer.mainWindowInterpretersInterface()
@@ -383,6 +383,28 @@ void RobotsPluginFacade::connectEventsForKitPlugin()
 			, &mEventsForKitPlugin
 			, &kitBase::EventsForKitPluginInterface::interpretationStopped
 			);
+
+	QObject::connect(
+				&mEventsForKitPlugin
+				, &kitBase::EventsForKitPluginInterface::interpretationStarted
+				, [this](){ /// @todo
+		const bool isBlockInt = mProxyInterpreter.isRunning();
+		mActionsManager.runAction().setEnabled(isBlockInt);
+		mActionsManager.stopRobotAction().setEnabled(isBlockInt);
+		mActionsManager.setEnableRobotActions(isBlockInt);
+	}
+	);
+
+	QObject::connect(
+				&mEventsForKitPlugin
+				, &kitBase::EventsForKitPluginInterface::interpretationStopped
+				, [this](qReal::interpretation::StopReason reason){ /// @todo
+		Q_UNUSED(reason);
+		mActionsManager.runAction().setEnabled(true);
+		mActionsManager.stopRobotAction().setEnabled(true);
+		mActionsManager.setEnableRobotActions(true);
+	}
+	);
 
 	QObject::connect(
 			&mRobotModelManager

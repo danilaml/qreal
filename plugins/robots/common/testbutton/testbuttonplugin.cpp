@@ -12,30 +12,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#pragma once
+#include "testbuttonplugin.h"
 
-#include <kitBase/robotModel/robotParts/device.h>
+using namespace testbutton;
 
-namespace trik {
-namespace robotModel {
-namespace parts {
-
-class TrikLed : public kitBase::robotModel::robotParts::Device
+TestButtonPlugin::TestButtonPlugin()
+	: TrikKitInterpreterPluginBase()
+    , mRepo(nullptr)
+	, mAction(tr("TEST"), nullptr)
 {
-	Q_OBJECT
-	Q_CLASSINFO("name", "led")
-	Q_CLASSINFO("friendlyName", tr("Led"))
-	Q_CLASSINFO("direction", "output")
-
-public:
-	TrikLed(const kitBase::robotModel::DeviceInfo &info
-			, const kitBase::robotModel::PortInfo &port);
-
-public slots:
-	/// @todo: led color enum here
-	virtual void setColor(const QString &color) = 0;
-};
-
+	//defaultRobotModel()->name()
+	connect(&mAction, &QAction::triggered, this, &exterminate);
 }
+
+TestButtonPlugin::~TestButtonPlugin()
+{
 }
+
+QList<qReal::ActionInfo> TestButtonPlugin::customActions()
+{
+	return { qReal::ActionInfo(&mAction, "file", "tools") };
+}
+
+void TestButtonPlugin::exterminate()
+{
+	//mRepo->exterminate();
+	//mMainWindowInterpretersInterface->reinitModels();
 }

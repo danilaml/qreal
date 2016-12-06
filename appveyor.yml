@@ -13,12 +13,18 @@ configuration:
   - debug
   - release
 
-install:
+before_build:
+  - if %PROJECT_FILE%==qrealRobots git submodule update --init
   - set PATH=%QTDIR%\bin;%MINGW%\bin;%WINDIR%\system32;%WINDIR%;%WINDIR%\System32\WindowsPowerShell\v1.0\;
 
 build_script:
   - qmake %PROJECT_FILE%.pro -r -spec win32-g++ CONFIG+=%CONFIGURATION%
   - mingw32-make -j2
+
+#temp hack to copy dlls
+after_build:
+  - set trikRuntimeBinDir=C:\qreal\plugins\robots\thirdparty\trikRuntime\trikRuntime\bin\x86-%CONFIGURATION%
+  - if %PROJECT_FILE%==qrealRobots xcopy %trikRuntimeBinDir% C:\qreal\bin\%configuration% /Y /C
 
 artifacts:
  - path: bin\$(configuration)
