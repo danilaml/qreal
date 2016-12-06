@@ -18,8 +18,8 @@ set -o errexit
 
 
 function show_help {
-	echo "Usage: build-checker-installer.sh <path to Qt> [<path to QReal>] [<path to directory with fields>] [<path to directory with examples>] [<path to directory with tasks>]"
-	echo "<path to Qt> --- root of your Qt 5.5 installation"
+	echo "Usage: build-checker-installer.sh [<path to Qt with version>] [<path to QReal>] [<path to directory with fields>] [<path to directory with examples>] [<path to directory with tasks>]"
+	echo "<path to Qt with version> --- root of your Qt installation with version release build of qrealRobots.pro"
 	echo "<path to QReal> --- path to QReal sources root (with completed release build of qrealRobots.pro)."
 	echo "                    Defaults to \"../..\""
 	echo "<path to \"fields\" directory> --- path to directory with prepared fields."
@@ -38,11 +38,16 @@ cd "$(dirname "$0")"
 
 QT_ARCH=$(qmake -query QT_HOST_DATA)
 #QT_ARCH=$(qmake -query QT_INSTALL_ARCHDATA)
-if [ "$#" -lt 2 ]; then
-	qtDir=$QT_ARCH
+if [ "$#" -lt 1 ]; then
+	qtDir=$(readlink -f $QT_ARCH)
+	qtDirForPlugins=$(readlink -f $qtDir/plugins)
+	qtDirForSo=$(readlink -f $qtDir/../)
 else
 	ARG1=$(readlink -f $1)
-	qtDir=$ARG1
+	qtDir=$(readlink -f $ARG1)
+	qtDirGcc=$(readlink -f $qtDir/gcc_64)
+	qtDirForPlugins=$(readlink -f $qtDirGcc/plugins)
+	qtDirForSo=$(readlink -f $qtDirGcc/lib)
 fi
 
 
@@ -79,26 +84,26 @@ mkdir -p trikStudio-checker/bin
 cd trikStudio-checker/bin
 
 # Copying required Qt libraries
-cp -rf $qtDir/plugins/iconengines .
+cp -rf $qtDirForPlugins/iconengines .
 
 mkdir -p imageformats
-cp -fP  $qtDir/plugins/imageformats/libqsvg.so imageformats/
+cp -fP $qtDirForPlugins/imageformats/libqsvg.so imageformats/
 
 mkdir -p platforms
-cp -fP $qtDir/plugins/platforms/libqminimal.so platforms/
+cp -fP $qtDirForPlugins/platforms/libqminimal.so platforms/
 
-cp -fP $qtDir/../libicudata.so* .
-cp -fP $qtDir/../libicui18n.so* .
-cp -fP $qtDir/../libicuuc.so* .
-cp -fP $qtDir/../libQt5Core.so* .
-cp -fP $qtDir/../libQt5Gui.so* .
-cp -fP $qtDir/../libQt5Network.so* .
-cp -fP $qtDir/../libQt5PrintSupport.so* .
-cp -fP $qtDir/../libQt5Script.so* .
-cp -fP $qtDir/../libQt5Svg.so* .
-cp -fP $qtDir/../libQt5Widgets.so* .
-cp -fP $qtDir/../libQt5Xml.so* .
-cp -fP $qtDir/../libQt5DBus.so* .
+cp -fP $qtDirForSo/libicudata.so* .
+cp -fP $qtDirForSo/libicui18n.so* .
+cp -fP $qtDirForSo/libicuuc.so* .
+cp -fP $qtDirForSo/libQt5Core.so* .
+cp -fP $qtDirForSo/libQt5Gui.so* .
+cp -fP $qtDirForSo/libQt5Network.so* .
+cp -fP $qtDirForSo/libQt5PrintSupport.so* .
+cp -fP $qtDirForSo/libQt5Script.so* .
+cp -fP $qtDirForSo/libQt5Svg.so* .
+cp -fP $qtDirForSo/libQt5Widgets.so* .
+cp -fP $qtDirForSo/libQt5Xml.so* .
+cp -fP $qtDirForSo/libQt5DBus.so* .
 
 # Copying QReal libraries
 cp -fP $qRealDir/bin/release/changelog.txt .
