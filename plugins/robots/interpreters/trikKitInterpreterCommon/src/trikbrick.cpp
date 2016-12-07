@@ -11,10 +11,16 @@
 #include <QtCore/QTimer>
 using namespace trik;
 
+static const int updateInterval = 25;
 TrikBrick::TrikBrick(const QSharedPointer<robotModel::twoD::TrikTwoDRobotModel> &model)
 	: mTwoDRobotModel(model), mDisplay(model), mKeys(model)
 {
 	connect(this, &TrikBrick::log, this, &TrikBrick::printToShell);
+
+	mSensorUpdater.setInterval(updateInterval);
+	connect(&mSensorUpdater, &QTimer::timeout, [model](){
+		model->updateSensorsValues(); /// @todo: maybe connect to model directly?
+    });
 //	QTimer *t = new QTimer(this);
 //	t->setInterval(25);
 //	connect(t, &QTimer::timeout, [this](){
@@ -39,13 +45,21 @@ TrikBrick::~TrikBrick()
 void TrikBrick::reset()
 {
 	mKeys.reset();///@todo: reset motos/device maps?
+<<<<<<< HEAD
 	mDisplay.reset();
+=======
+	//mDisplay.reset(); - is actually needed? Crashes app at exit
+>>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 	for (const auto &m : mMotors) {
 		m->powerOff();
 	}
 	for (const auto &e : mEncoders) {
 		e->reset();
 	}
+<<<<<<< HEAD
+=======
+	mSensorUpdater.stop(); /// maybe needed in other places too.
+>>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 }
 
 void TrikBrick::printToShell(const QString &msg)
@@ -63,6 +77,7 @@ void TrikBrick::printToShell(const QString &msg)
 void TrikBrick::init()
 {
 	mDisplay.init();
+<<<<<<< HEAD
 	for (const auto &m : mMotors) {
 		m->powerOff();
 	}
@@ -72,10 +87,26 @@ void TrikBrick::init()
 	for (const auto &s : mSensors) {
 		s->read();
 	}
+=======
+//	for (const auto &m : mMotors) {
+//		m->powerOff();
+//	}
+//	for (const auto &e : mEncoders) {
+//		e->read();
+//	}
+//	for (const auto &s : mSensors) {
+//		s->read();
+//	}
+	mTwoDRobotModel->updateSensorsValues();
+>>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 	mMotors.clear(); // needed? reset?
 	mSensors.clear();
 	mEncoders.clear();
 	mKeys.init();
+<<<<<<< HEAD
+=======
+	mSensorUpdater.start();
+>>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 }
 
 void TrikBrick::stop() {
