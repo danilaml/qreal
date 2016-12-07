@@ -45,21 +45,14 @@ TrikBrick::~TrikBrick()
 void TrikBrick::reset()
 {
 	mKeys.reset();///@todo: reset motos/device maps?
-<<<<<<< HEAD
-	mDisplay.reset();
-=======
 	//mDisplay.reset(); - is actually needed? Crashes app at exit
->>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 	for (const auto &m : mMotors) {
 		m->powerOff();
 	}
 	for (const auto &e : mEncoders) {
 		e->reset();
 	}
-<<<<<<< HEAD
-=======
 	mSensorUpdater.stop(); /// maybe needed in other places too.
->>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 }
 
 void TrikBrick::printToShell(const QString &msg)
@@ -77,17 +70,6 @@ void TrikBrick::printToShell(const QString &msg)
 void TrikBrick::init()
 {
 	mDisplay.init();
-<<<<<<< HEAD
-	for (const auto &m : mMotors) {
-		m->powerOff();
-	}
-	for (const auto &e : mEncoders) {
-		e->read();
-	}
-	for (const auto &s : mSensors) {
-		s->read();
-	}
-=======
 //	for (const auto &m : mMotors) {
 //		m->powerOff();
 //	}
@@ -98,15 +80,11 @@ void TrikBrick::init()
 //		s->read();
 //	}
 	mTwoDRobotModel->updateSensorsValues();
->>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 	mMotors.clear(); // needed? reset?
 	mSensors.clear();
 	mEncoders.clear();
 	mKeys.init();
-<<<<<<< HEAD
-=======
 	mSensorUpdater.start();
->>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 }
 
 void TrikBrick::stop() {

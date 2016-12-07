@@ -273,10 +273,7 @@ void TrikKitInterpreterPluginBase::testStart()
 	auto isJS = [](const QString &ext){ return ext == "js" || ext == "qts"; };
 
 	if (texttab && isJS(texttab->currentLanguage().extension)) {
-<<<<<<< HEAD
-=======
 		emit codeInterpretationStarted(texttab->text());
->>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 
 		auto model = mTwoDRobotModel;
 		model->stopRobot(); // testStop?
@@ -314,12 +311,6 @@ void TrikKitInterpreterPluginBase::testStop()
 
 void TrikKitInterpreterPluginBase::onTabChanged(const TabInfo &info)
 {
-<<<<<<< HEAD
-	const bool isCodeTab = info.type() == qReal::TabInfo::TabType::code;
-	/// @todo: hack!
-	mStart.setVisible(mIsModelSelected && isCodeTab);
-	mStop.setVisible(mIsModelSelected && isCodeTab);
-=======
 	if (info.type() == qReal::TabInfo::TabType::other) {
 		return;
 	}
@@ -338,5 +329,4 @@ void TrikKitInterpreterPluginBase::onTabChanged(const TabInfo &info)
 		mStart.setVisible(false);
 		mStop.setVisible(false);
 	}
->>>>>>> 758b06b03969ff6ce2ae9b62ea11912b9952b922
 }
