@@ -156,13 +156,6 @@ void TrikKitInterpreterPluginBase::init(const kitBase::KitPluginConfigurator &co
 	);
 
 	QObject::connect(
-				this
-				, &TrikKitInterpreterPluginBase::codeInterpretationStarted
-				, &configurer.eventsForKitPlugin()
-				, &kitBase::EventsForKitPluginInterface::codeInterpretationStarted
-				);
-
-	QObject::connect(
 				&configurer.eventsForKitPlugin()
 				, &kitBase::EventsForKitPluginInterface::interpretationStopped
 				, [this](qReal::interpretation::StopReason reason){ /// @todo

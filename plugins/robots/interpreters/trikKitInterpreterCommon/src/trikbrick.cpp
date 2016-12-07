@@ -16,10 +16,11 @@ TrikBrick::TrikBrick(const QSharedPointer<robotModel::twoD::TrikTwoDRobotModel> 
 	: mTwoDRobotModel(model), mDisplay(model), mKeys(model)
 {
 	connect(this, &TrikBrick::log, this, &TrikBrick::printToShell);
+
 	mSensorUpdater.setInterval(updateInterval);
 	connect(&mSensorUpdater, &QTimer::timeout, [model](){
 		model->updateSensorsValues(); /// @todo: maybe connect to model directly?
-	});
+    });
 //	QTimer *t = new QTimer(this);
 //	t->setInterval(25);
 //	connect(t, &QTimer::timeout, [this](){

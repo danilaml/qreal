@@ -434,13 +434,6 @@ void RobotsPluginFacade::connectEventsForKitPlugin()
 
 	QObject::connect(
 				&mEventsForKitPlugin
-				, &kitBase::EventsForKitPluginInterface::codeInterpretationStarted
-				, this
-				, &RobotsPluginFacade::saveCode
-				);
-
-	QObject::connect(
-				&mEventsForKitPlugin
 				, &kitBase::EventsForKitPluginInterface::interpretationStopped
 				, [this](qReal::interpretation::StopReason reason){ /// @todo
 		Q_UNUSED(reason);
