@@ -18,7 +18,7 @@ set -o errexit
 
 
 function show_help {
-	echo "Usage: build-checker-installer.sh [<path to Qt with version>] [<path to QReal>] [<path to directory with fields>] [<path to directory with examples>] [<path to directory with tasks>]"
+	echo "Usage: build-checker-installer.sh [<path to Qt with version>] [<path to QReal>] [<path to directory with fields>] [<path to directory with examples>] [<path to directory with tasks>] [<path to directory with inputs>]"
 	echo "<path to Qt with version> --- root of your Qt installation with version release build of qrealRobots.pro"
 	echo "<path to QReal> --- path to QReal sources root (with completed release build of qrealRobots.pro)."
 	echo "                    Defaults to \"../..\""
@@ -28,6 +28,8 @@ function show_help {
 	echo "                                     Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/solutions>.\""
 	echo "<path to \"tasks\" directory> --- path to directory with saves with tasks."
 	echo "                                  Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/tasks>.\""
+	echo "<path to \"inputs\" directory> --- path to directory with saves with inputs."
+	echo "                                  Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/inputs>.\""
 	echo "Example: ./build-checker-installer.sh ~/Qt ~/stepic-examples"
 	exit 0
 }
@@ -78,6 +80,12 @@ if [ "$#" -gt 4 ]; then
 	tasksDir=$(readlink -f $5)
 else
 	tasksDir=$(readlink -f $qRealDir/qrtest/trikStudioSimulatorTests/tasks)
+fi
+
+if [ "$#" -gt 5 ]; then
+	inputsDir=$(readlink -f $6)
+else
+	inputsDir=$(readlink -f $qRealDir/qrtest/trikStudioSimulatorTests/inputs)
 fi
 
 mkdir -p trikStudio-checker/bin
@@ -189,6 +197,7 @@ cp -fP $qRealDir/bin/release/checker.sh .
 cp -r $fieldsDir ./fields
 cp -r $examplesDir ./examples
 cp -r $tasksDir ./tasks
+cp -r $inputsDir ./inputs
 
 # Packing
 cd ..
