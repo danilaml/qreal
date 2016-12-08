@@ -110,12 +110,16 @@ void TrikKitInterpreterPluginBase::init(const kitBase::KitPluginConfigurator &co
 	mStop.setIcon(QIcon(":/trik/qts/images/stop.png"));
 
 	mStop.setVisible(false);
-	mStart.setVisible(true); // true?
+	mStart.setVisible(false);
 
 	connect(&configurer.robotModelManager()
 			, &kitBase::robotModel::RobotModelManagerInterface::robotModelChanged
 			, [this](kitBase::robotModel::RobotModelInterface &model){
 		mIsModelSelected = robotModels().contains(&model);
+		/// @todo: would probably make sense to make the current opened tab info available globally somewhere
+		bool isCodeTabOpen = dynamic_cast<qReal::text::QScintillaTextEdit *>(mMainWindow->currentTab());
+		mStart.setVisible(mIsModelSelected && isCodeTabOpen);
+		mStop.setVisible(false); // interpretation should always stop when switching models?
 //		kitBase::robotModel::RobotModelInterface * const ourModel = robotModels()[0];
 //		for (const ActionInfo &action : customActions()) {
 //			if (action.isAction()) {
@@ -318,21 +322,19 @@ void TrikKitInterpreterPluginBase::testStop()
 
 void TrikKitInterpreterPluginBase::onTabChanged(const TabInfo &info)
 {
-	if (info.type() == qReal::TabInfo::TabType::other) {
+	if (!mIsModelSelected) {
 		return;
 	}
 	const bool isCodeTab = info.type() == qReal::TabInfo::TabType::code;
-//	/// @todo: hack!
-//	mStart.setVisible(mIsModelSelected && isCodeTab);
-//	mStop.setVisible(mIsModelSelected && isCodeTab);
-	static bool startVisible = true;
 	mStart.setEnabled(isCodeTab);
 	mStop.setEnabled(isCodeTab);
+	if (mQtsInterpreter->isRunning()) {
+		mStop.trigger(); // Should interpretation should always stops at the change of tabs or not?
+	}
 	if (isCodeTab) {
-		mStart.setVisible(mIsModelSelected && startVisible);
-		mStop.setVisible(mIsModelSelected && !startVisible);
+		mStart.setVisible(true);
+		mStop.setVisible(false);
 	} else {
-		startVisible = mStart.isVisible();
 		mStart.setVisible(false);
 		mStop.setVisible(false);
 	}
