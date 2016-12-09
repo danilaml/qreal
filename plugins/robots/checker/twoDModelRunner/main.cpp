@@ -88,10 +88,13 @@ int main(int argc, char *argv[])
 				" written. The writing will not be performed not immediately, each trajectory point will be written"\
 				" just when obtained by checker, so FIFOs are recommended to be targets for this option.")
 			, "path-to-trajectory", "trajectory.fifo");
+	QCommandLineOption inputOption("input", QObject::tr("Inputs for JavaScript solution")
+			, "path-to-input", "input.json");
 	parser.addOption(backgroundOption);
 	parser.addOption(platformOption);
 	parser.addOption(reportOption);
 	parser.addOption(trajectoryOption);
+	parser.addOption(inputOption);
 
 	qsrand(time(0));
 	initLogging();
@@ -111,7 +114,9 @@ int main(int argc, char *argv[])
 	const bool backgroundMode = parser.isSet(backgroundOption);
 	const QString report = parser.isSet(reportOption) ? parser.value(reportOption) : QString();
 	const QString trajectory = parser.isSet(trajectoryOption) ? parser.value(trajectoryOption) : QString();
-	twoDModel::Runner runner(report, trajectory);
+	const QString input = parser.isSet(inputOption) ? parser.value(inputOption) : QString();
+//	twoDModel::Runner runner(report, trajectory);
+	twoDModel::Runner runner(report, trajectory, input);
 	if (!runner.interpret(qrsFile, backgroundMode)) {
 		return 2;
 	}
