@@ -16,49 +16,6 @@
 set -o nounset
 set -o errexit
 
-<<<<<<< HEAD
-
-function show_help {
-	echo "Usage: build-checker-installer.sh [<path to Qt with version>] [<path to QReal>] [<path to directory with fields>] [<path to directory with examples>] [<path to directory with tasks>] [<path to directory with inputs>]"
-	echo "<path to Qt with version> --- root of your Qt installation with version release build of qrealRobots.pro"
-	echo "<path to QReal> --- path to QReal sources root (with completed release build of qrealRobots.pro)."
-	echo "                    Defaults to \"../..\""
-	echo "<path to \"fields\" directory> --- path to directory with prepared fields."
-	echo "                                   Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/fields/fields>.\""
-	echo "<path to \"examples\" directory> --- path to directory with example saves."
-	echo "                                     Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/solutions>.\""
-	echo "<path to \"tasks\" directory> --- path to directory with saves with tasks."
-	echo "                                  Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/tasks>.\""
-	echo "<path to \"inputs\" directory> --- path to directory with saves with inputs."
-	echo "                                  Defaults to \"<path to QReal/qrtest/trikStudioSimulatorTests/inputs>.\""
-	echo "Example: ./build-checker-installer.sh ~/Qt ~/stepic-examples"
-	exit 0
-}
-
-
-
-cd "$(dirname "$0")"
-
-QT_ARCH=$(qmake -query QT_HOST_DATA)
-#QT_ARCH=$(qmake -query QT_INSTALL_ARCHDATA)
-if [ "$#" -lt 1 ]; then
-	qtDir=$(readlink -f $QT_ARCH)
-	qtDirForPlugins=$(readlink -f $qtDir/plugins)
-	qtDirForSo=$(readlink -f $qtDir/../)
-else
-	ARG1=$(readlink -f $1)
-	qtDir=$(readlink -f $ARG1)
-	qtDirGcc=$(readlink -f $qtDir/gcc_64)
-	qtDirForPlugins=$(readlink -f $qtDirGcc/plugins)
-	qtDirForSo=$(readlink -f $qtDirGcc/lib)
-fi
-
-
-#qtDir=${ARG1-:$QT_ARCH}
-#echo qtDir=$qtDir
-#[ "x$qtDir" == "x" ] && show_help || :
-
-=======
 function check_qmake_version {
         
 #	echo Here
@@ -83,7 +40,6 @@ function show_help {
 [ "$*" == "--help" ] && show_help || :
 
 pushd "$(dirname "$0")"
->>>>>>> 6cd2eb3299a352fe680c32ee5d5bb8340b0c484d
 
 if [ "$#" -gt 1 ]; then
 	qRealDir=$(readlink -f $1)
@@ -128,19 +84,12 @@ else
 fi
 
 if [ "$#" -gt 5 ]; then
-<<<<<<< HEAD
-	inputsDir=$(readlink -f $6)
-=======
 	inputsDir=$(readlink -f $5)
->>>>>>> 6cd2eb3299a352fe680c32ee5d5bb8340b0c484d
 else
 	inputsDir=$(readlink -f $qRealDir/qrtest/trikStudioSimulatorTests/inputs)
 fi
 
-<<<<<<< HEAD
-=======
 rm -rf trikStudio-checker
->>>>>>> 6cd2eb3299a352fe680c32ee5d5bb8340b0c484d
 mkdir -p trikStudio-checker/bin
 pushd trikStudio-checker/bin
 
@@ -148,28 +97,6 @@ if $NEED_QT_LIBS ; then
     LIBS=$(ldd ./qreal | grep so | sed -e '/^[^\t]/ d' | sed -e 's/\t//' | sed -e 's/.*=..//' | sed -e 's/ (0.*)//' | sort -u | grep -Ev '^\.|^/lib')
 
 # Copying required Qt libraries
-<<<<<<< HEAD
-cp -rf $qtDirForPlugins/iconengines .
-
-mkdir -p imageformats
-cp -fP $qtDirForPlugins/imageformats/libqsvg.so imageformats/
-
-mkdir -p platforms
-cp -fP $qtDirForPlugins/platforms/libqminimal.so platforms/
-
-cp -fP $qtDirForSo/libicudata.so* .
-cp -fP $qtDirForSo/libicui18n.so* .
-cp -fP $qtDirForSo/libicuuc.so* .
-cp -fP $qtDirForSo/libQt5Core.so* .
-cp -fP $qtDirForSo/libQt5Gui.so* .
-cp -fP $qtDirForSo/libQt5Network.so* .
-cp -fP $qtDirForSo/libQt5PrintSupport.so* .
-cp -fP $qtDirForSo/libQt5Script.so* .
-cp -fP $qtDirForSo/libQt5Svg.so* .
-cp -fP $qtDirForSo/libQt5Widgets.so* .
-cp -fP $qtDirForSo/libQt5Xml.so* .
-cp -fP $qtDirForSo/libQt5DBus.so* .
-=======
     ${COPY} $qtDirForPlugins/iconengines .
 
     mkdir -p imageformats
@@ -187,15 +114,10 @@ cp -fP $qtDirForSo/libQt5DBus.so* .
         $qtDirLib/libQt5Widgets.so* $qtDirLib/libQt5Xml.so* $qtDirLib/libQt5DBus.so* .
 
 fi 
->>>>>>> 6cd2eb3299a352fe680c32ee5d5bb8340b0c484d
 
 # Copying QReal libraries
 cp -fP $qRealDir/bin/release/changelog.txt .
 cp -fP $qRealDir/bin/release/libqrgraph.so* .
-<<<<<<< HEAD
-cp -fP $qRealDir/bin/release/libqrgui-meta-meta-model.so* .
-=======
->>>>>>> 6cd2eb3299a352fe680c32ee5d5bb8340b0c484d
 cp -fP $qRealDir/bin/release/libqrgui-brand-manager.so* .
 cp -fP $qRealDir/bin/release/libqrgui-controller.so* .
 cp -fP $qRealDir/bin/release/libqrgui-dialogs.so* .
@@ -283,10 +205,3 @@ cp -r $inputsDir ./inputs
 popd
 
 tar cvfJ trik_checker.tar.xz trikStudio-checker
-
-<<<<<<< HEAD
-tar cvfz trik_checker.tar.gz trikStudio-checker
-rm -rf trikStudio-checker
-
-=======
->>>>>>> 6cd2eb3299a352fe680c32ee5d5bb8340b0c484d
