@@ -205,4 +205,3 @@ cp -r $inputsDir ./inputs
 popd
 
 tar cvfJ trik_checker.tar.xz trikStudio-checker
-
