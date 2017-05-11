@@ -45,6 +45,8 @@ public:
 	/// Returns true if timeline is ticking at the moment.
 	bool isStarted() const;
 
+	bool isPaused() const;
+
 	quint64 timestamp() const override;
 
 	utils::AbstractTimer *produceTimer() override;
@@ -56,6 +58,8 @@ public:
 public slots:
 	void start();
 	void stop(qReal::interpretation::StopReason reason);
+	void pause();
+	void resume();
 
 	// Speed factor is also cycles per frame count
 	void setSpeedFactor(int factor);
@@ -91,8 +95,10 @@ private:
 	int mCyclesCount;
 	qint64 mFrameStartTimestamp;
 	bool mIsStarted;
+	bool mIsPaused;
 	quint64 mTimestamp;
 	int mFrameLength = defaultFrameLength;
+	int mRemainingTime;
 };
 
 }

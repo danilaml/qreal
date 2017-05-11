@@ -25,7 +25,9 @@ Timeline::Timeline(QObject *parent)
 	, mSpeedFactor(normalSpeedFactor)
 	, mCyclesCount(0)
 	, mIsStarted(false)
+	, mIsPaused(false)
 	, mTimestamp(0)
+	, mRemainingTime(0)
 {
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(onTimer()));
 	mTimer.setInterval(defaultRealTimeInterval);
@@ -36,7 +38,7 @@ void Timeline::start()
 	if (!mIsStarted) {
 		mIsStarted = true;
 		emit started();
-		emit tick(); /// hack so that constraints init-on would start immediatly
+		emit tick(); /// hack so that constraints init-on would start immediately
 		/// ideally they should be triggered on started()
 		gotoNextFrame();
 	}
@@ -53,9 +55,34 @@ void Timeline::stop(qReal::interpretation::StopReason reason)
 	}
 }
 
+void Timeline::pause()
+{
+	if (mIsStarted && !mIsPaused) {
+		if (mTimer.isActive()) {
+			mRemainingTime = mTimer.remainingTime();
+			mTimer.stop();
+		} else {
+			mRemainingTime = 0;
+		}
+
+		mIsPaused = true;
+	}
+}
+
+void Timeline::resume()
+{
+	if (mIsStarted && mIsPaused) {
+		mIsPaused = false;
+		QTimer::singleShot(mRemainingTime, this, [&](){
+			onTimer();
+			mTimer.start(defaultRealTimeInterval);
+		});
+	}
+}
+
 void Timeline::onTimer()
 {
-	if (!mIsStarted) {
+	if (!mIsStarted || mIsPaused) {
 		mTimer.stop();
 		return;
 	}
@@ -101,6 +128,11 @@ int Timeline::speedFactor() const
 bool Timeline::isStarted() const
 {
 	return mIsStarted;
+}
+
+bool Timeline::isPaused() const
+{
+	return mIsPaused;
 }
 
 quint64 Timeline::timestamp() const
