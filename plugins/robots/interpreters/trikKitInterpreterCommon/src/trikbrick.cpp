@@ -37,6 +37,7 @@ TrikBrick::TrikBrick(const QSharedPointer<robotModel::twoD::TrikTwoDRobotModel> 
 	, mKeys(model)
 	, mIsWaitingEnabled(true)
 	, mSensorUpdater(model->timeline().produceTimer())
+	, mShell(nullptr)
 {
 	connect(this, &TrikBrick::log, this, &TrikBrick::printToShell);
 	mSensorUpdater->setRepeatable(true);
@@ -60,6 +61,7 @@ TrikBrick::~TrikBrick()
 void TrikBrick::reset()
 {
 	mKeys.reset();///@todo: reset motos/device maps?
+	mShell = nullptr;
 	//mDisplay.reset(); - is actually needed? Crashes app at exit
 	emit stopWaiting();
 	for (const auto &m : mMotors) {
@@ -79,12 +81,15 @@ void TrikBrick::reset()
 void TrikBrick::printToShell(const QString &msg)
 {
 	using namespace kitBase::robotModel;
-	robotParts::Shell* sh = RobotModelUtils::findDevice<robotParts::Shell>(*mTwoDRobotModel, "ShellPort");
-	if (sh == nullptr) {
-		qDebug("Error: 2d model shell part was not found");
-		return;
+	if (!mShell) {
+		robotParts::Shell* sh = RobotModelUtils::findDevice<robotParts::Shell>(*mTwoDRobotModel, "ShellPort");
+		if (sh == nullptr) {
+			qDebug("Error: 2d model shell part was not found");
+			return;
+		}
+		mShell = sh;
 	}
-	sh->print(msg);
+	mShell->print(msg); // safe because it only emits a signal
 }
 
 void TrikBrick::init()

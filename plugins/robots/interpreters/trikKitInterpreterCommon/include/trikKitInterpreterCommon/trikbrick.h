@@ -36,6 +36,13 @@
 namespace utils {
 class AbstractTimer;
 }
+namespace kitBase {
+namespace robotModel {
+namespace robotParts {
+class Shell;
+}
+}
+}
 
 namespace trik {
 
@@ -118,6 +125,8 @@ private:
 	QScopedPointer<TrikLedAdapter> mLed;
 	QScopedPointer<TrikAccelerometerAdapter> mAccelerometer;
 	QScopedPointer<TrikGyroscopeAdapter> mGyroscope;
+
+	kitBase::robotModel::robotParts::Shell *mShell; // No ownership
 
 	QDir mCurrentDir;
 	bool mIsExcerciseMode = false;
