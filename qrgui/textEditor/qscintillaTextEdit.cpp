@@ -21,6 +21,8 @@
 using namespace qReal;
 using namespace text;
 
+static const int circleMarkerNum = 1;
+
 QScintillaTextEdit::QScintillaTextEdit()
 	: mRole(0)
 {
@@ -42,6 +44,18 @@ QScintillaTextEdit::~QScintillaTextEdit()
 LanguageInfo QScintillaTextEdit::currentLanguage() const
 {
 	return mLanguage;
+}
+
+QVector<int> QScintillaTextEdit::getMarkedLines() const
+{
+	unsigned int mask = 0xFFFFFFFF;
+	QVector<int> res;
+	int curline = markerFindNext(0, mask);
+	while (curline != -1) {
+		res.append(curline);
+		curline = markerFindNext(curline + 1, mask);
+	}
+	return res;
 }
 
 void QScintillaTextEdit::setCurrentLanguage(const LanguageInfo &language)
@@ -142,6 +156,13 @@ void QScintillaTextEdit::setDefaultSettings()
 	setMarginLineNumbers(1, true);
 	setMarginWidth(1, QString("1000"));
 
+	// Allow placing "breakpoints"
+	setMarginSensitivity(1, true);
+	markerDefine(QsciScintilla::Circle, circleMarkerNum);
+	setMarkerBackgroundColor(QColor("red"));
+	connect(this, SIGNAL(marginClicked(int,int,Qt::KeyboardModifiers))
+			, this, SLOT(onMarginClicked(int,int,Qt::KeyboardModifiers)));
+
 	// Autocompletion of lexems
 	setAutoCompletionSource(QsciScintilla::AcsAll);
 	setAutoCompletionCaseSensitivity(true);
@@ -174,4 +195,15 @@ void QScintillaTextEdit::setDefaultSettings()
 void QScintillaTextEdit::emitTextWasModified()
 {
 	emit textWasModified(this);
+}
+
+void QScintillaTextEdit::onMarginClicked(int margin, int line, Qt::KeyboardModifiers state)
+{
+	Q_UNUSED(margin);
+	Q_UNUSED(state);
+	if (markersAtLine(line)) {
+		markerDelete(line, circleMarkerNum);
+	} else {
+		markerAdd(line, circleMarkerNum);
+	}
 }

@@ -42,6 +42,9 @@ public:
 	/// Returns a reference to an object that keeps current editor settings.s
 	LanguageInfo currentLanguage() const;
 
+	/// Returns marked lines numbers
+	QVector<int> getMarkedLines() const;
+
 	/// Applies language editor settings to current editor instance.
 	/// Takes ownership on passed language.
 	void setCurrentLanguage(const LanguageInfo &language);
@@ -68,6 +71,7 @@ signals:
 
 private slots:
 	void emitTextWasModified();
+	void onMarginClicked(int margin, int line, Qt::KeyboardModifiers state);
 
 private:
 	void init();
