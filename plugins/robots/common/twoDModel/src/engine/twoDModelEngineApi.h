@@ -57,6 +57,7 @@ public:
 	void markerUp() override;
 
 	utils::TimelineInterface &modelTimeline() override;
+	engine::TwoDModelDebuggerControlInterface *debugger() override;
 	engine::TwoDModelDisplayInterface *display() override;
 	engine::TwoDModelGuiFacade &guiFacade() const override;
 
@@ -77,6 +78,7 @@ private:
 	view::TwoDModelWidget &mView;
 	QScopedPointer<view::FakeScene> mFakeScene;
 	QScopedPointer<engine::TwoDModelGuiFacade> mGuiFacade;
+	QScopedPointer<engine::TwoDModelDebuggerControlInterface> mDebugger;
 };
 
 }

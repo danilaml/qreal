@@ -31,6 +31,7 @@
 #include "twoDModel/engine/twoDModelGuiFacade.h"
 #include "twoDModel/engine/model/model.h"
 #include "twoDModel/engine/model/constants.h"
+#include "twoDModel/engine/model/debugger.h"
 #include "twoDModel/engine/view/twoDModelWidget.h"
 
 #include "view/scene/twoDModelScene.h"
@@ -53,6 +54,7 @@ TwoDModelEngineApi::TwoDModelEngineApi(model::Model &model, view::TwoDModelWidge
 	, mView(view)
 	, mFakeScene(new view::FakeScene(mModel.worldModel()))
 	, mGuiFacade(new engine::TwoDModelGuiFacade(mView))
+	, mDebugger(new Debugger(model.timeline()))
 {
 }
 
@@ -313,6 +315,11 @@ void TwoDModelEngineApi::markerUp()
 utils::TimelineInterface &TwoDModelEngineApi::modelTimeline()
 {
 	return mModel.timeline();
+}
+
+engine::TwoDModelDebuggerControlInterface *TwoDModelEngineApi::debugger()
+{
+	return mDebugger.data();
 }
 
 engine::TwoDModelDisplayInterface *TwoDModelEngineApi::display()

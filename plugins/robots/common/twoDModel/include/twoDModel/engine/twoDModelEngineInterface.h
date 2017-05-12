@@ -24,6 +24,7 @@ namespace engine {
 
 class TwoDModelDisplayInterface;
 class TwoDModelGuiFacade;
+class TwoDModelDebuggerControlInterface;
 
 /// An interface for using 2D model in extensibility components.
 /// Provides some basic engine methods like scanning the field or playing the sound or working with display.
@@ -84,6 +85,9 @@ public:
 
 	/// Retuns the timeline implementation for the 2D model time.
 	virtual utils::TimelineInterface &modelTimeline() = 0;
+
+	/// Retuns the debugger interface for the 2d model if supported. nullptr otherwise.
+	virtual TwoDModelDebuggerControlInterface *debugger() = 0;
 
 	/// Returns a pointer to 2D model display emulator.
 	virtual TwoDModelDisplayInterface *display() = 0;
