@@ -16,11 +16,19 @@
 
 #include <QSharedPointer>
 
-#include "robotModel/twoD/trikTwoDRobotModel.h"
 #include "trikKitInterpreterCommon/trikbrick.h"
+
+#include "trikKitInterpreterCommon/trikQtsDebugger.h"
+#include "robotModel/twoD/trikTwoDRobotModel.h"
 #include "trikScriptRunner/trikScriptRunner.h"
 
 #include "declSpec.h"
+
+namespace twoDModel {
+namespace engine {
+class TwoDModelDebuggerControlInterface;
+}
+}
 
 namespace trik {
 
@@ -34,7 +42,7 @@ public:
 	~TrikQtsInterpreter() override;
 
 	void interpretCommand(const QString &script);
-	void interpretScript(const QString &script);
+	void interpretScript(const QString &script, const QVector<int> &bp);
 	void interpretScriptExercise(const QString &script, const QString &inputs);
 	void abort();
 
@@ -62,6 +70,7 @@ private:
 	TrikBrick mBrick;
 	trikScriptRunner::TrikScriptRunner mScriptRunner;
 	qReal::ErrorReporterInterface *mErrorReporter;
+	TrikQtsDebugger mDebugger;
 };
 
 }

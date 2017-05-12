@@ -21,7 +21,9 @@
 
 #include <qrgui/plugins/toolPluginInterface/usedInterfaces/errorReporterInterface.h>
 
-#include <twoDModel/engine/model/timeline.h>
+#include "twoDModel/engine/model/timeline.h"
+#include "twoDModel/engine/twoDModelEngineInterface.h"
+#include "trikKitInterpreterCommon/trikQtsDebugger.h"
 
 
 Q_DECLARE_METATYPE(utils::AbstractTimer*)
@@ -34,7 +36,11 @@ const QString overrides = "script.random = brick.random;script.wait = brick.wait
 		"script.system = function() {print('system is disabled in the interpreter');};";
 
 trik::TrikQtsInterpreter::TrikQtsInterpreter(const QSharedPointer<trik::robotModel::twoD::TrikTwoDRobotModel> &model)
-	: mRunning(false), mBrick(model), mScriptRunner(mBrick, nullptr), mErrorReporter(nullptr)
+		: mRunning(false)
+		, mBrick(model)
+		, mScriptRunner(mBrick, nullptr)
+		, mErrorReporter(nullptr)
+		, mDebugger(model->engine()->debugger())
 {
 	connect(&mBrick, &TrikBrick::error, this, &TrikQtsInterpreter::reportError);
 
@@ -46,6 +52,9 @@ trik::TrikQtsInterpreter::TrikQtsInterpreter(const QSharedPointer<trik::robotMod
 	};
 	mScriptRunner.addCustomEngineInitStep([&atimerToScriptValue, &atimerFromScriptValue](QScriptEngine *engine){
 		qScriptRegisterMetaType<utils::AbstractTimer*>(engine, atimerToScriptValue, atimerFromScriptValue);
+	});
+	mScriptRunner.addCustomEngineInitStep([&](QScriptEngine *engine){
+		mDebugger.registerNewScriptAgent(engine);
 	});
 	connect(&mScriptRunner, SIGNAL(completed(QString,int)), this, SLOT(scriptFinished(QString,int)));
 }
@@ -60,9 +69,11 @@ void trik::TrikQtsInterpreter::interpretCommand(const QString &script)
 	mScriptRunner.runDirectCommand(script);
 }
 
-void trik::TrikQtsInterpreter::interpretScript(const QString &script)
+void trik::TrikQtsInterpreter::interpretScript(const QString &script, const QVector<int> &bp)
 {
 	mRunning = true;
+	mDebugger.enable(true);
+	mDebugger.setBreakpoints(bp);
 	mScriptRunner.run(overrides + script);
 }
 
@@ -72,6 +83,7 @@ void trik::TrikQtsInterpreter::interpretScriptExercise(const QString &script, co
 	mBrick.setCurrentInputs(inputs);
 	QString newScript = overrides + "script.writeToFile = null;\n" + script;
 	//qDebug() << newScript;
+	//mDebugger->enable(true);
 	mScriptRunner.run(newScript);
 }
 
@@ -81,6 +93,7 @@ void trik::TrikQtsInterpreter::abort()
 	mBrick.stopWaiting();
 	QMetaObject::invokeMethod(&mScriptRunner, "abort"); // just a wild test
 	mRunning = false; // reset brick?
+	mDebugger.enable(false);
 }
 
 void trik::TrikQtsInterpreter::init()
@@ -175,6 +188,7 @@ void trik::TrikQtsInterpreter::scriptFinished(const QString &error, int scriptId
 	}
 	if (mRunning) { /// @todo: figure out better place for this check - it should avoid double aborts
 		mRunning = false;
+		mDebugger.enable(false);
 		emit completed();
 	}
 }

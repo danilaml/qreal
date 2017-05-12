@@ -18,6 +18,7 @@
 #include <QtWidgets/QLineEdit>
 
 #include <twoDModel/engine/twoDModelEngineFacade.h>
+#include <twoDModel/engine/twoDModelDebuggerInterface.h>
 #include <qrkernel/settingsManager.h>
 #include <qrkernel/settingsListener.h>
 
@@ -31,7 +32,7 @@ const Id robotDiagramType = Id("RobotsMetamodel", "RobotsDiagram", "RobotsDiagra
 const Id subprogramDiagramType = Id("RobotsMetamodel", "RobotsDiagram", "SubprogramDiagram");
 
 TrikKitInterpreterPluginBase::TrikKitInterpreterPluginBase() :
-	mStart(tr("Start QTS"), nullptr), mStop(tr("Stop QTS"), nullptr)
+	mStart(nullptr), mStop(nullptr), mResume(nullptr)
 {
 }
 
@@ -68,7 +69,7 @@ void TrikKitInterpreterPluginBase::initKitInterpreterPluginBase
 	mQtsInterpreter.reset(new TrikQtsInterpreter(mTwoDRobotModel));
 }
 
-void TrikKitInterpreterPluginBase::startJSInterpretation(const QString &code)
+void TrikKitInterpreterPluginBase::startJSInterpretation(const QString &code, const QVector<int> &bp)
 {
 	emit codeInterpretationStarted(code);
 
@@ -89,7 +90,7 @@ void TrikKitInterpreterPluginBase::startJSInterpretation(const QString &code)
 	qtsInterpreter()->setCurrentDir(mProjectManager->saveFilePath());
 	qtsInterpreter()->setRunning(true);
 	emit started();
-	qtsInterpreter()->interpretScript(code);
+	qtsInterpreter()->interpretScript(code, bp);
 }
 
 void TrikKitInterpreterPluginBase::startJSInterpretation(const QString &code, const QString &inputs)
@@ -159,6 +160,35 @@ void TrikKitInterpreterPluginBase::init(const kitBase::KitPluginConfigurator &co
 	mStop.setObjectName("stopQts");
 	mStop.setText(tr("Stop robot"));
 	mStop.setIcon(QIcon(":/trik/qts/images/stop.png"));
+
+	mResume.setObjectName("resumeQts");
+	mResume.setText(tr("Resume robot"));
+	mResume.setIcon(QIcon(":/icons/resume.png"));
+	mResume.setVisible(false);
+	/// @todo: move this all complex button visibility handling logic in some dedicated class
+	connect(mTwoDRobotModel->engine()->debugger()
+			, &twoDModel::engine::TwoDModelDebuggerControlInterface::modelPaused
+			, this
+			, [&]{
+		if (mQtsInterpreter->isRunning()) {
+			mStop.setVisible(false);
+			mResume.setVisible(true);
+		}
+	});
+
+	connect(mTwoDRobotModel->engine()->debugger()
+			, &twoDModel::engine::TwoDModelDebuggerControlInterface::modelResumed
+			, this
+			, [&]{
+		if (mQtsInterpreter->isRunning()) {
+			mStop.setVisible(true);
+			mResume.setVisible(false);
+		}
+	});
+
+	connect(&mResume, &QAction::triggered, this, [&]{
+		mTwoDRobotModel->engine()->debugger()->resumeModel();
+	});
 
 	mStop.setVisible(false);
 	mStart.setVisible(false);
@@ -295,7 +325,9 @@ QWidget *TrikKitInterpreterPluginBase::quickPreferencesFor(const kitBase::robotM
 
 QList<qReal::ActionInfo> TrikKitInterpreterPluginBase::customActions()
 {
-	return { qReal::ActionInfo(&mStart, "interpreters", "tools"), qReal::ActionInfo(&mStop, "interpreters", "tools") };
+	return { qReal::ActionInfo(&mStart, "interpreters", "tools")
+				, qReal::ActionInfo(&mStop, "interpreters", "tools")
+				, qReal::ActionInfo(&mResume, "interpreters", "tools") };
 }
 
 QList<HotKeyActionInfo> TrikKitInterpreterPluginBase::hotKeyActions()
@@ -357,7 +389,7 @@ void TrikKitInterpreterPluginBase::testStart()
 	auto isJS = [](const QString &ext){ return ext == "js" || ext == "qts"; };
 
 	if (texttab && isJS(texttab->currentLanguage().extension)) {
-		startJSInterpretation(texttab->text());
+		startJSInterpretation(texttab->text(), texttab->getMarkedLines());
 	} else {
 		qDebug("wrong tab selected");
 		mStop.setVisible(false);

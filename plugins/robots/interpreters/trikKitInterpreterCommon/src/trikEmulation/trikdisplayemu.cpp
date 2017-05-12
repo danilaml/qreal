@@ -39,9 +39,7 @@ void TrikDisplayEmu::init()
 void TrikDisplayEmu::showImage(const QString &fileName)
 {
 	const bool smile = fileName.endsWith(QLatin1String("sad.png"));
-	QMetaObject::invokeMethod(mDisplay,
-			"drawSmile",
-			 Q_ARG(bool, smile));
+	QMetaObject::invokeMethod(mDisplay, "drawSmile", Q_ARG(bool, smile));
 }
 
 void TrikDisplayEmu::addLabel(const QString &text, int x, int y)

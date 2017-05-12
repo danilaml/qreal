@@ -94,7 +94,7 @@ protected:
 	qReal::gui::MainWindowInterpretersInterface *mMainWindow;
 
 private:
-	void startJSInterpretation(const QString &code);
+	void startJSInterpretation(const QString &code, const QVector<int> &bp);
 	void startJSInterpretation(const QString &code, const QString &inputs);
 
 	QScopedPointer<twoDModel::TwoDModelControlInterface> mTwoDModel;
@@ -105,6 +105,7 @@ private:
 
 	QAction mStart;
 	QAction mStop;
+	QAction mResume;
 
 	bool mIsModelSelected = false;
 
